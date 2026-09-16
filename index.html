@@ -1046,6 +1046,154 @@
     </div>
   </div>
 
+  <!-- 7.3 Citizen Authentication & Registration Modal -->
+  <div id="auth-modal" class="modal-backdrop">
+    <div class="modal-dialog" style="max-width: 500px;">
+      <div class="modal-header" style="background: linear-gradient(135deg, #0A192F, #1E3A8A); color: white;">
+        <h3 class="modal-title" style="color: var(--gold-light); font-size: 1.15rem;">
+          <i class="fas fa-id-card"></i> สมัครสมาชิก / เข้าสู่ระบบประชาชน
+        </h3>
+        <button id="auth-modal-close" class="modal-close-btn" style="color: white;">&times;</button>
+      </div>
+      <div class="modal-body" style="background: #F8FAFC; padding: 1.5rem;">
+        
+        <!-- Step 1: Citizen Profile Details & Phone -->
+        <div id="auth-step-phone">
+          <p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">
+            ลงทะเบียนข้อมูลประชาชนตำบลเพนียด เพื่อติดตามเรื่องร้องทุกข์ แจ้งเหตุฉุกเฉิน และชำระภาษีออนไลน์ สะดวก ปลอดภัย
+          </p>
+
+          <div class="form-group" style="margin-bottom: 0.9rem;">
+            <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.3rem; color: #1E293B;">
+              <i class="fas fa-phone-alt text-primary"></i> เบอร์โทรศัพท์มือถือ (10 หลัก) <span style="color: #EF4444;">*</span>
+            </label>
+            <input type="tel" id="auth-phone-input" class="form-control" placeholder="0812345678" maxlength="10" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 0.95rem;" />
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0.9rem;">
+            <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.3rem; color: #1E293B;">
+              <i class="fas fa-user text-primary"></i> ชื่อ - นามสกุล <span style="color: #EF4444;">*</span>
+            </label>
+            <input type="text" id="auth-name-input" class="form-control" placeholder="นายสมชาย เพนียดดี" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 0.95rem;" />
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0.9rem;">
+            <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.3rem; color: #1E293B;">
+              <i class="fas fa-id-badge text-primary"></i> เลขบัตรประจำตัวประชาชน 13 หลัก
+            </label>
+            <input type="text" id="auth-citizen-id-input" class="form-control" placeholder="1100200345678" maxlength="13" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 0.95rem;" />
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem;">
+            <div class="form-group">
+              <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.3rem; color: #1E293B;">
+                <i class="fas fa-home text-primary"></i> บ้านเลขที่
+              </label>
+              <input type="text" id="auth-house-input" class="form-control" placeholder="99/1" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 0.95rem;" />
+            </div>
+            <div class="form-group">
+              <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.3rem; color: #1E293B;">
+                <i class="fas fa-map-pin text-primary"></i> หมู่ที่ (ต.เพนียด)
+              </label>
+              <select id="auth-moo-input" class="form-control" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 0.95rem; background: white;">
+                <option value="หมู่ 1">หมู่ 1 บ้านเพนียด</option>
+                <option value="หมู่ 2" selected>หมู่ 2 บ้านเพนียด</option>
+                <option value="หมู่ 3">หมู่ 3 บ้านโคกกระเบื้อง</option>
+                <option value="หมู่ 4">หมู่ 4 บ้านหนองหว้า</option>
+                <option value="หมู่ 5">หมู่ 5 บ้านใหม่สามัคคี</option>
+                <option value="หมู่ 6">หมู่ 6 บ้านคลองเพนียด</option>
+                <option value="หมู่ 7">หมู่ 7 บ้านห้วยโป่ง</option>
+                <option value="หมู่ 8">หมู่ 8 บ้านหนองตะเคียน</option>
+                <option value="หมู่ 9">หมู่ 9 บ้านโคกพัฒนา</option>
+                <option value="หมู่ 10">หมู่ 10 บ้านเพนียดทอง</option>
+              </select>
+            </div>
+          </div>
+
+          <button id="send-otp-btn" class="btn btn-primary" style="width: 100%; padding: 0.75rem; font-size: 1rem; font-weight: 600;">
+            <i class="fas fa-paper-plane"></i> รับรหัส OTP ยืนยันตัวตน
+          </button>
+        </div>
+
+        <!-- Step 2: OTP Verification -->
+        <div id="auth-step-otp" style="display: none;">
+          <div style="text-align: center; margin-bottom: 1.25rem;">
+            <div style="width: 56px; height: 56px; background: #DBEAFE; color: #1D4ED8; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; font-size: 1.5rem;">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h4 style="font-size: 1.1rem; color: #1E293B; margin-bottom: 0.25rem;">ยืนยันรหัส OTP</h4>
+            <p style="font-size: 0.85rem; color: #64748B;">
+              ระบบส่งรหัส 6 หลักไปยังหมายเลข <strong id="auth-target-phone" style="color: #1E293B;">-</strong>
+            </p>
+          </div>
+
+          <div style="background: #FEF3C7; border: 1px dashed #F59E0B; border-radius: 6px; padding: 0.75rem; margin-bottom: 1rem; text-align: center;">
+            <span style="font-size: 0.85rem; color: #92400E;">รหัส OTP สำหรับทดสอบ: <strong id="demo-otp-code" style="font-size: 1.1rem; letter-spacing: 2px;">123456</strong></span>
+            <button id="quick-otp-fill" type="button" style="display: block; margin: 0.35rem auto 0; background: none; border: none; color: #D97706; text-decoration: underline; font-size: 0.8rem; cursor: pointer;">
+              คลิกเพื่อกรอก OTP อัตโนมัติ
+            </button>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <input type="text" id="auth-otp-input" class="form-control" placeholder="• • • • • •" maxlength="6" style="width: 100%; text-align: center; font-size: 1.6rem; letter-spacing: 0.5rem; font-weight: 700; padding: 0.6rem; border: 2px solid #CBD5E1; border-radius: 8px;" />
+          </div>
+
+          <p style="text-align: center; font-size: 0.85rem; color: #64748B; margin-bottom: 1.25rem;">
+            รหัสหมดอายุใน <span id="otp-countdown" style="font-weight: 600; color: #EF4444;">60 วินาที</span>
+          </p>
+
+          <button id="verify-otp-btn" class="btn btn-primary" style="width: 100%; padding: 0.75rem; font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem;">
+            <i class="fas fa-check-circle"></i> ยืนยันและบันทึกข้อมูลสมาชิก
+          </button>
+          <button id="auth-back-btn" type="button" class="btn btn-outline" style="width: 100%; padding: 0.6rem; font-size: 0.9rem;">
+            <i class="fas fa-arrow-left"></i> ย้อนกลับไปแก้ไขข้อมูล
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 7.4 Citizen Profile Overview Modal -->
+  <div id="profile-modal" class="modal-backdrop">
+    <div class="modal-dialog" style="max-width: 480px;">
+      <div class="modal-header" style="background: #0F172A; color: white;">
+        <h3 class="modal-title" style="color: var(--gold-light); font-size: 1.15rem;">
+          <i class="fas fa-user-circle"></i> ข้อมูลสมาชิกประชาชน
+        </h3>
+        <button id="profile-modal-close" class="modal-close-btn" style="color: white;">&times;</button>
+      </div>
+      <div class="modal-body" style="background: #F8FAFC; padding: 1.5rem;">
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+          <div style="width: 64px; height: 64px; background: linear-gradient(135deg, #1E3A8A, #3B82F6); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.8rem; font-weight: 700;">
+            <i class="fas fa-user"></i>
+          </div>
+          <h4 id="profile-display-name" style="font-size: 1.2rem; color: #0F172A; margin-bottom: 0.25rem;">นายสมชาย เพนียดดี</h4>
+          <span class="badge badge-success"><i class="fas fa-check-circle"></i> สมาชิกยืนยันตัวตนแล้ว (Supabase Cloud)</span>
+        </div>
+
+        <div style="background: white; border: 1px solid #E2E8F0; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid #F1F5F9; font-size: 0.9rem;">
+            <span style="color: #64748B;">เบอร์โทรศัพท์:</span>
+            <strong id="profile-display-phone" style="color: #0F172A;">-</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid #F1F5F9; font-size: 0.9rem;">
+            <span style="color: #64748B;">เลขบัตรประชาชน:</span>
+            <strong id="profile-display-id" style="color: #0F172A;">-</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; font-size: 0.9rem;">
+            <span style="color: #64748B;">ที่อยู่ตำบลเพนียด:</span>
+            <strong id="profile-display-address" style="color: #0F172A;">-</strong>
+          </div>
+        </div>
+
+        <button id="profile-logout-btn" class="btn btn-outline" style="width: 100%; padding: 0.7rem; color: #EF4444; border-color: #FCA5A5; font-weight: 600;">
+          <i class="fas fa-sign-out-alt"></i> ออกจากระบบ
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- 7.5 Supabase Database Configuration Modal -->
   <div id="supabase-modal" class="modal-backdrop">
     <div class="modal-dialog" style="max-width: 540px;">
