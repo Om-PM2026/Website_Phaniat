@@ -104,6 +104,19 @@ CREATE TABLE IF NOT EXISTS public.complaints (
 );
 
 -- ==============================================================================
+-- 6.5 TABLE: chat_messages (ประวัติการสนทนากับ AI Chatbot อบต.เพนียด)
+-- ==============================================================================
+CREATE TABLE IF NOT EXISTS public.chat_messages (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    session_id VARCHAR(100) NOT NULL,
+    sender VARCHAR(20) NOT NULL CHECK (sender IN ('user', 'bot')),
+    message TEXT NOT NULL,
+    user_name VARCHAR(255),
+    user_phone VARCHAR(20),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ==============================================================================
 -- 7. ROW LEVEL SECURITY (RLS) POLICIES
 -- ==============================================================================
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
@@ -111,6 +124,7 @@ ALTER TABLE public.news ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.invoices ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.emergency_reports ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.complaints ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.chat_messages ENABLE ROW LEVEL SECURITY;
 
 -- Public Read & Write Policies for Demo / Public Portal (Anon key access)
 CREATE POLICY "Public Read News" ON public.news FOR SELECT USING (true);
@@ -133,6 +147,9 @@ CREATE POLICY "Public Read Profiles" ON public.profiles FOR SELECT USING (true);
 CREATE POLICY "Public Insert Profiles" ON public.profiles FOR INSERT WITH CHECK (true);
 CREATE POLICY "Public Update Profiles" ON public.profiles FOR UPDATE USING (true);
 
+CREATE POLICY "Public Read Chat Messages" ON public.chat_messages FOR SELECT USING (true);
+CREATE POLICY "Public Insert Chat Messages" ON public.chat_messages FOR INSERT WITH CHECK (true);
+
 -- ==============================================================================
 -- 8. ENABLE REALTIME FOR LIVE NOTIFICATIONS
 -- ==============================================================================
@@ -142,7 +159,9 @@ BEGIN;
     public.emergency_reports, 
     public.complaints, 
     public.invoices, 
-    public.news;
+    public.news,
+    public.chat_messages;
+COMMIT;
 COMMIT;
 
 -- ==============================================================================

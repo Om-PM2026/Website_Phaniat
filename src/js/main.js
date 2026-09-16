@@ -8,6 +8,7 @@ import { payment } from './payment.js';
 import { complaints } from './complaints.js';
 import { news } from './news.js';
 import { admin } from './admin.js';
+import { chatbot } from './chatbot.js';
 import { 
   getActiveSupabaseConfig, 
   saveSupabaseConfig, 
@@ -236,6 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
   complaints.init();
   news.init();
   admin.init();
+  chatbot.init();
 
   // 3. Initialize Supabase Connection UI
   initSupabaseModal();
