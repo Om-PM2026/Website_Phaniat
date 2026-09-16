@@ -137,27 +137,31 @@
 }
 
 .news-card-title {
-  font-size: 1.15rem;
+  font-size: 1.08rem;
   font-weight: 700;
-  line-height: 1.4;
+  line-height: 1.55;
   color: var(--primary-dark);
   margin-bottom: 0.65rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .news-card-snippet {
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   color: var(--text-muted);
-  line-height: 1.5;
+  line-height: 1.65;
   margin-bottom: 1.25rem;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   flex-grow: 1;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .news-card-footer {
