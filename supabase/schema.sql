@@ -162,7 +162,6 @@ BEGIN;
     public.news,
     public.chat_messages;
 COMMIT;
-COMMIT;
 
 -- ==============================================================================
 -- 9. INITIAL SEED DATA (ข้อมูลตั้งต้น อบต.เพนียด)
