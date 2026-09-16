@@ -406,6 +406,9 @@ export const store = {
           }
         } else {
           console.log('✅ Supabase Insert Complaint Success');
+          if (window.showToast) {
+            window.showToast('บันทึกเรื่องร้องทุกข์ขึ้น Supabase Cloud สำเร็จ!', 'success', 'Supabase Live DB');
+          }
         }
       });
     }
