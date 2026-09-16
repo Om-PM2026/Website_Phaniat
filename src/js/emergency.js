@@ -265,7 +265,7 @@ export const emergency = {
     this.showTrackingModal(report);
   },
 
-  handleSearchTracking() {
+  async handleSearchTracking() {
     const input = document.getElementById('emergency-search-code-input');
     const code = input ? input.value.trim() : '';
 
@@ -274,8 +274,15 @@ export const emergency = {
       return;
     }
 
-    const reports = store.getEmergencyReports();
-    const item = reports.find(r => r.id.toLowerCase() === code.toLowerCase());
+    let reports = store.getEmergencyReports();
+    let item = reports.find(r => r.id.toLowerCase() === code.toLowerCase());
+
+    if (!item) {
+      // Try fetching latest from Supabase
+      await store.syncFromSupabase();
+      reports = store.getEmergencyReports();
+      item = reports.find(r => r.id.toLowerCase() === code.toLowerCase());
+    }
 
     if (!item) {
       window.showToast(`ไม่พบข้อมูลรหัสแจ้งเหตุ ${code}`, 'danger');

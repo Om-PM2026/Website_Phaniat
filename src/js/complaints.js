@@ -297,7 +297,7 @@ export const complaints = {
     });
   },
 
-  handleSearchTracking() {
+  async handleSearchTracking() {
     const input = document.getElementById('complaint-search-input');
     const code = input ? input.value.trim() : '';
 
@@ -306,7 +306,12 @@ export const complaints = {
       return;
     }
 
-    const item = store.getComplaints().find(c => c.id.toLowerCase() === code.toLowerCase());
+    let item = store.getComplaints().find(c => c.id.toLowerCase() === code.toLowerCase());
+    if (!item) {
+      await store.syncFromSupabase();
+      item = store.getComplaints().find(c => c.id.toLowerCase() === code.toLowerCase());
+    }
+
     if (!item) {
       window.showToast(`ไม่พบรหัสเรื่องร้องทุกข์ ${code}`, 'danger');
       return;

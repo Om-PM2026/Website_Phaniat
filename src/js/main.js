@@ -8,6 +8,12 @@ import { payment } from './payment.js';
 import { complaints } from './complaints.js';
 import { news } from './news.js';
 import { admin } from './admin.js';
+import { 
+  getActiveSupabaseConfig, 
+  saveSupabaseConfig, 
+  isSupabaseConfigured, 
+  getSupabase 
+} from './supabaseClient.js';
 
 // Global Toast Notification Helper
 window.showToast = function(message, type = 'info', title = '') {
@@ -94,6 +100,130 @@ window.navigateToSection = function(sectionId) {
   }
 };
 
+// Update Supabase Connection Status Badge in Header
+function updateSupabaseBadge() {
+  const badgeText = document.getElementById('supabase-badge-status');
+  const badgeBtn = document.getElementById('supabase-config-btn');
+  if (!badgeText || !badgeBtn) return;
+
+  if (isSupabaseConfigured()) {
+    badgeText.textContent = '🟢 Supabase: เชื่อมต่อแล้ว';
+    badgeBtn.style.background = '#059669';
+  } else {
+    badgeText.textContent = '🟡 ตั้งค่า Supabase DB';
+    badgeBtn.style.background = '#D97706';
+  }
+}
+
+// Bind Supabase Configuration Modal Events
+function initSupabaseModal() {
+  const btn = document.getElementById('supabase-config-btn');
+  const modal = document.getElementById('supabase-modal');
+  const closeBtn = document.getElementById('supabase-modal-close');
+  const urlInput = document.getElementById('supabase-input-url');
+  const keyInput = document.getElementById('supabase-input-key');
+  const saveBtn = document.getElementById('supabase-save-btn');
+  const clearBtn = document.getElementById('supabase-clear-btn');
+  const feedback = document.getElementById('supabase-test-feedback');
+
+  if (!btn || !modal) return;
+
+  updateSupabaseBadge();
+
+  btn.addEventListener('click', () => {
+    const config = getActiveSupabaseConfig();
+    if (urlInput) urlInput.value = config.url || '';
+    if (keyInput) keyInput.value = config.anonKey || '';
+    if (feedback) {
+      feedback.style.display = 'none';
+      feedback.innerHTML = '';
+    }
+    modal.classList.add('open');
+  });
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('open');
+    });
+  }
+
+  if (saveBtn) {
+    saveBtn.addEventListener('click', async () => {
+      const url = urlInput ? urlInput.value.trim() : '';
+      const key = keyInput ? keyInput.value.trim() : '';
+
+      if (!url || !key) {
+        if (feedback) {
+          feedback.style.display = 'block';
+          feedback.style.background = '#FEE2E2';
+          feedback.style.color = '#991B1B';
+          feedback.innerHTML = '<i class="fas fa-exclamation-triangle"></i> กรุณากรอกทั้ง Project URL และ Anon Key';
+        }
+        return;
+      }
+
+      saveSupabaseConfig(url, key);
+      updateSupabaseBadge();
+
+      if (feedback) {
+        feedback.style.display = 'block';
+        feedback.style.background = '#FEF3C7';
+        feedback.style.color = '#92400E';
+        feedback.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังทดสอบเชื่อมต่อฐานข้อมูล Supabase...';
+      }
+
+      try {
+        const client = getSupabase();
+        if (!client) throw new Error('ไม่สามารถสร้าง Supabase Client ได้');
+
+        const { data, error } = await client.from('emergency_reports').select('id').limit(1);
+
+        if (error) {
+          throw error;
+        }
+
+        if (feedback) {
+          feedback.style.display = 'block';
+          feedback.style.background = '#DCFCE7';
+          feedback.style.color = '#166534';
+          feedback.innerHTML = '<i class="fas fa-check-circle"></i> เชื่อมต่อฐานข้อมูล Supabase สำเร็จ! ระบบพร้อมบันทึกข้อมูลเรียลไทม์';
+        }
+
+        window.showToast('เชื่อมต่อ Supabase Database สำเร็จแล้ว!', 'success');
+        await store.syncFromSupabase();
+        store.subscribeRealtime();
+
+        setTimeout(() => {
+          modal.classList.remove('open');
+        }, 1500);
+      } catch (err) {
+        console.error('Supabase connection failed:', err);
+        if (feedback) {
+          feedback.style.display = 'block';
+          feedback.style.background = '#FEE2E2';
+          feedback.style.color = '#991B1B';
+          feedback.innerHTML = `<i class="fas fa-times-circle"></i> เกิดข้อผิดพลาด: ${err.message || 'โปรดตรวจสอบ URL และ Key หรือรัน schema.sql ใน Supabase'}`;
+        }
+      }
+    });
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      localStorage.removeItem('phaniat_supabase_config');
+      if (urlInput) urlInput.value = '';
+      if (keyInput) keyInput.value = '';
+      updateSupabaseBadge();
+      if (feedback) {
+        feedback.style.display = 'block';
+        feedback.style.background = '#F1F5F9';
+        feedback.style.color = '#475569';
+        feedback.innerHTML = 'ล้างค่าการเชื่อมต่อเรียบร้อยแล้ว (กลับสู่โหมด Local Demo)';
+      }
+    });
+  }
+}
+
 // App Initialization on DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Initialize Store
@@ -107,7 +237,10 @@ document.addEventListener('DOMContentLoaded', () => {
   news.init();
   admin.init();
 
-  // 3. Bind Navigation Events
+  // 3. Initialize Supabase Connection UI
+  initSupabaseModal();
+
+  // 4. Bind Navigation Events
   document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();

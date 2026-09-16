@@ -47,6 +47,9 @@
         </a>
       </div>
       <div class="hotline-right d-flex align-center gap-1">
+        <button id="supabase-config-btn" class="badge" style="cursor: pointer; border: none; background: #059669; color: white;">
+          <i class="fas fa-database"></i> <span id="supabase-badge-status">ตั้งค่า Supabase DB</span>
+        </button>
         <button id="admin-demo-toggle-btn" class="badge badge-warning" style="cursor: pointer; border: none;">
           <i class="fas fa-user-shield"></i> สลับมุมมองเจ้าหน้าที่ อบต.
         </button>
@@ -1043,6 +1046,48 @@
     </div>
   </div>
 
+  <!-- 7.5 Supabase Database Configuration Modal -->
+  <div id="supabase-modal" class="modal-backdrop">
+    <div class="modal-dialog" style="max-width: 540px;">
+      <div class="modal-header" style="background: #0F172A; color: white;">
+        <h3 class="modal-title" style="color: #38BDF8; font-size: 1.15rem;">
+          <i class="fas fa-database"></i> ตั้งค่าเชื่อมต่อ Supabase Database
+        </h3>
+        <button id="supabase-modal-close" class="modal-close-btn" style="color: white;">&times;</button>
+      </div>
+      <div class="modal-body" style="background: #F8FAFC; padding: 1.5rem;">
+        <p style="font-size: 0.88rem; color: #475569; margin-bottom: 1.25rem; line-height: 1.5;">
+          นำ <strong>Project URL</strong> และ <strong>API Anon Key</strong> จาก Supabase Dashboard มาใส่ที่นี่ เพื่อให้ระบบบันทึกข้อมูลแจ้งเหตุฉุกเฉินและเรื่องร้องทุกข์ลงฐานข้อมูล Supabase แบบ Real-time ทันที
+        </p>
+
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.4rem; color: #1E293B;">
+            <i class="fas fa-link text-primary"></i> Supabase Project URL:
+          </label>
+          <input type="text" id="supabase-input-url" class="form-control" placeholder="https://xxxxxxxxxxxxxx.supabase.co" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 0.9rem;" />
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.4rem; color: #1E293B;">
+            <i class="fas fa-key text-primary"></i> Supabase Anon Key (Public API Key):
+          </label>
+          <textarea id="supabase-input-key" class="form-control" rows="3" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #CBD5E1; border-radius: 6px; font-family: monospace; font-size: 0.8rem; line-height: 1.3; resize: vertical;"></textarea>
+        </div>
+
+        <div id="supabase-test-feedback" style="display: none; padding: 0.75rem; border-radius: 6px; margin-bottom: 1.25rem; font-size: 0.85rem;"></div>
+
+        <div class="d-flex justify-between gap-2">
+          <button id="supabase-save-btn" class="btn btn-primary" style="flex: 1; padding: 0.7rem;">
+            <i class="fas fa-check-circle"></i> บันทึกและทดสอบเชื่อมต่อ
+          </button>
+          <button id="supabase-clear-btn" class="btn btn-outline" style="padding: 0.7rem; color: #EF4444; border-color: #FCA5A5;">
+            ล้างค่า
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- 8. Officer / Admin Demo Simulation Modal -->
   <div id="admin-modal" class="modal-backdrop">
     <div class="modal-dialog modal-lg">
@@ -1089,6 +1134,9 @@
 
   <!-- Leaflet JS Library -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <!-- Modular App Script -->
   <script type="module" src="./src/js/main.js"></script>

@@ -1,6 +1,7 @@
 /**
- * Central State & LocalStorage Manager for Phaniat SAO Portal
+ * Central State, Supabase DB & LocalStorage Manager for Phaniat SAO Portal
  */
+import { getSupabase, isSupabaseConfigured } from './supabaseClient.js';
 
 const STORAGE_KEYS = {
   CURRENT_USER: 'phaniat_current_user',
@@ -147,7 +148,7 @@ const INITIAL_EMERGENCY_REPORTS = [
     },
     details: 'รถจักรยานยนต์เฉี่ยวชนกับรถกระบะ มีผู้บาดเจ็บถลอก 1 ราย รู้สึกตัวดี ต้องการกู้ชีพปฐมพยาบาล',
     images: ['https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=400&q=80'],
-    status: 'in_progress', // pending, in_progress, resolved
+    status: 'in_progress',
     statusLabel: 'เจ้าหน้าที่กำลังเดินทางไปที่เกิดเหตุ',
     timestamp: '16 ก.ย. 2569 14:15 น.',
     timeline: [
@@ -172,7 +173,7 @@ const INITIAL_COMPLAINTS = [
     },
     details: 'ถนนลาดยางชำรุดเป็นหลุมลึก มีน้ำขัง รถเล็กสัญจรลำบาก เกรงว่าจะเกิดอุบัติเหตุในเวลากลางคืน',
     images: ['https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=400&q=80'],
-    status: 'investigating', // received, investigating, fixing, completed
+    status: 'investigating',
     statusLabel: 'กองช่างรับเรื่องและลงพื้นที่สำรวจแล้ว',
     timestamp: '14 ก.ย. 2569 09:30 น.',
     timeline: [
@@ -183,7 +184,8 @@ const INITIAL_COMPLAINTS = [
 ];
 
 export const store = {
-  init() {
+  async init() {
+    // 1. Initial Local Storage fallback
     if (!localStorage.getItem(STORAGE_KEYS.NEWS)) {
       localStorage.setItem(STORAGE_KEYS.NEWS, JSON.stringify(INITIAL_NEWS));
     }
@@ -196,6 +198,91 @@ export const store = {
     if (!localStorage.getItem(STORAGE_KEYS.COMPLAINTS)) {
       localStorage.setItem(STORAGE_KEYS.COMPLAINTS, JSON.stringify(INITIAL_COMPLAINTS));
     }
+
+    // 2. If Supabase is configured, sync initial data from database & subscribe to Realtime
+    if (isSupabaseConfigured()) {
+      await this.syncFromSupabase();
+      this.subscribeRealtime();
+    }
+  },
+
+  async syncFromSupabase() {
+    const client = getSupabase();
+    if (!client) return;
+
+    try {
+      // Sync News
+      const { data: newsData, error: newsErr } = await client.from('news').select('*').order('created_at', { ascending: false });
+      if (!newsErr && newsData && newsData.length > 0) {
+        localStorage.setItem(STORAGE_KEYS.NEWS, JSON.stringify(newsData.map(n => ({
+          ...n,
+          categoryLabel: n.category_label || n.categoryLabel
+        }))));
+      }
+
+      // Sync Invoices
+      const { data: invData, error: invErr } = await client.from('invoices').select('*').order('created_at', { ascending: false });
+      if (!invErr && invData && invData.length > 0) {
+        localStorage.setItem(STORAGE_KEYS.INVOICES, JSON.stringify(invData.map(i => ({
+          ...i,
+          typeName: i.type_name || i.typeName,
+          citizenId: i.citizen_id || i.citizenId,
+          refNumber: i.ref_number || i.refNumber,
+          customerName: i.customer_name || i.customerName,
+          dueDate: i.due_date || i.dueDate,
+          paidAt: i.paid_at || i.paidAt,
+          receiptNumber: i.receipt_number || i.receiptNumber,
+          paymentSlip: i.payment_slip || i.paymentSlip
+        }))));
+      }
+
+      // Sync Emergency Reports
+      const { data: emgData, error: emgErr } = await client.from('emergency_reports').select('*').order('created_at', { ascending: false });
+      if (!emgErr && emgData && emgData.length > 0) {
+        localStorage.setItem(STORAGE_KEYS.EMERGENCY_REPORTS, JSON.stringify(emgData.map(e => ({
+          ...e,
+          reporterPhone: e.reporter_phone || e.reporterPhone,
+          reporterName: e.reporter_name || e.reporterName,
+          statusLabel: e.status_label || e.statusLabel
+        }))));
+      }
+
+      // Sync Complaints
+      const { data: cmpData, error: cmpErr } = await client.from('complaints').select('*').order('created_at', { ascending: false });
+      if (!cmpErr && cmpData && cmpData.length > 0) {
+        localStorage.setItem(STORAGE_KEYS.COMPLAINTS, JSON.stringify(cmpData.map(c => ({
+          ...c,
+          reporterPhone: c.reporter_phone || c.reporterPhone,
+          reporterName: c.reporter_name || c.reporterName,
+          isAnonymous: c.is_anonymous ?? c.isAnonymous,
+          statusLabel: c.status_label || c.statusLabel
+        }))));
+      }
+      console.log('✅ Supabase data synced successfully');
+    } catch (err) {
+      console.warn('⚠️ Supabase sync warning:', err);
+    }
+  },
+
+  subscribeRealtime() {
+    const client = getSupabase();
+    if (!client) return;
+
+    // Realtime channel for emergency and complaints
+    client.channel('public_db_changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'emergency_reports' }, payload => {
+        console.log('⚡ Realtime Emergency update:', payload);
+        this.syncFromSupabase();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'complaints' }, payload => {
+        console.log('⚡ Realtime Complaint update:', payload);
+        this.syncFromSupabase();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'invoices' }, payload => {
+        console.log('⚡ Realtime Invoice update:', payload);
+        this.syncFromSupabase();
+      })
+      .subscribe();
   },
 
   getCurrentUser() {
@@ -219,6 +306,39 @@ export const store = {
     const reports = this.getEmergencyReports();
     reports.unshift(report);
     localStorage.setItem(STORAGE_KEYS.EMERGENCY_REPORTS, JSON.stringify(reports));
+
+    // Async push to Supabase
+    const client = getSupabase();
+    if (client) {
+      client.from('emergency_reports').insert([{
+        id: report.id,
+        type: report.type,
+        reporter_name: report.reporterName,
+        reporter_phone: report.reporterPhone,
+        location: report.location,
+        details: report.details,
+        images: report.images || [],
+        status: report.status || 'pending',
+        status_label: report.statusLabel || 'รอรับเรื่องและสั่งการ',
+        timestamp: report.timestamp,
+        timeline: report.timeline || []
+      }]).then(({ error, data }) => {
+        if (error) {
+          console.error('❌ Supabase Insert Emergency Error:', error);
+          if (window.showToast) {
+            window.showToast(`Supabase Error: ${error.message} (บันทึกในเครื่องเรียบร้อย)`, 'warning', 'การเชื่อมต่อ Supabase');
+          }
+        } else {
+          console.log('✅ Supabase Insert Emergency Success');
+          if (window.showToast) {
+            window.showToast('บันทึกข้อมูลขึ้น Supabase Cloud สำเร็จ!', 'success', 'Supabase Live DB');
+          }
+        }
+      });
+    } else {
+      console.info('ℹ️ Supabase not configured: Emergency saved to local storage.');
+    }
+
     return report;
   },
 
@@ -235,6 +355,19 @@ export const store = {
         note: note || ''
       });
       localStorage.setItem(STORAGE_KEYS.EMERGENCY_REPORTS, JSON.stringify(reports));
+
+      // Async update in Supabase
+      const client = getSupabase();
+      if (client) {
+        client.from('emergency_reports').update({
+          status: newStatus,
+          status_label: statusLabel,
+          timeline: item.timeline,
+          updated_at: new Date().toISOString()
+        }).eq('id', id).then(({ error }) => {
+          if (error) console.error('Supabase Update Emergency Error:', error);
+        });
+      }
     }
     return item;
   },
@@ -247,6 +380,36 @@ export const store = {
     const list = this.getComplaints();
     list.unshift(complaint);
     localStorage.setItem(STORAGE_KEYS.COMPLAINTS, JSON.stringify(list));
+
+    // Async push to Supabase
+    const client = getSupabase();
+    if (client) {
+      client.from('complaints').insert([{
+        id: complaint.id,
+        category: complaint.category,
+        title: complaint.title,
+        reporter_name: complaint.reporterName,
+        reporter_phone: complaint.reporterPhone,
+        is_anonymous: complaint.isAnonymous || false,
+        location: complaint.location,
+        details: complaint.details,
+        images: complaint.images || [],
+        status: complaint.status || 'received',
+        status_label: complaint.statusLabel || 'รับเรื่องร้องทุกข์แล้ว',
+        timestamp: complaint.timestamp,
+        timeline: complaint.timeline || []
+      }]).then(({ error }) => {
+        if (error) {
+          console.error('❌ Supabase Insert Complaint Error:', error);
+          if (window.showToast) {
+            window.showToast(`Supabase Error: ${error.message} (บันทึกในเครื่องเรียบร้อย)`, 'warning', 'การเชื่อมต่อ Supabase');
+          }
+        } else {
+          console.log('✅ Supabase Insert Complaint Success');
+        }
+      });
+    }
+
     return complaint;
   },
 
@@ -263,6 +426,19 @@ export const store = {
         note: note || ''
       });
       localStorage.setItem(STORAGE_KEYS.COMPLAINTS, JSON.stringify(complaints));
+
+      // Async update in Supabase
+      const client = getSupabase();
+      if (client) {
+        client.from('complaints').update({
+          status: newStatus,
+          status_label: statusLabel,
+          timeline: item.timeline,
+          updated_at: new Date().toISOString()
+        }).eq('id', id).then(({ error }) => {
+          if (error) console.error('Supabase Update Complaint Error:', error);
+        });
+      }
     }
     return item;
   },
@@ -294,6 +470,20 @@ export const store = {
       inv.paymentSlip = paymentSlip || null;
       inv.receiptNumber = 'RCP-' + Date.now().toString().slice(-6);
       localStorage.setItem(STORAGE_KEYS.INVOICES, JSON.stringify(invoices));
+
+      // Async update in Supabase
+      const client = getSupabase();
+      if (client) {
+        client.from('invoices').update({
+          status: 'paid',
+          paid_at: inv.paidAt,
+          payment_slip: inv.paymentSlip,
+          receipt_number: inv.receiptNumber,
+          updated_at: new Date().toISOString()
+        }).eq('id', invoiceId).then(({ error }) => {
+          if (error) console.error('Supabase Update Invoice Error:', error);
+        });
+      }
     }
     return inv;
   },
