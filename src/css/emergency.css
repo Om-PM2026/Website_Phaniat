@@ -1,0 +1,277 @@
+/* Emergency Section Specific Styles */
+.emergency-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 2rem;
+}
+
+.emergency-banner-alert {
+  background: linear-gradient(135deg, #FEF2F2, #FEE2E2);
+  border: 1.5px solid #FCA5A5;
+  border-radius: var(--radius-lg);
+  padding: 1.1rem 1.35rem;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin-bottom: 1.75rem;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.08);
+}
+
+.emergency-banner-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--danger);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem;
+  flex-shrink: 0;
+  animation: pulse-danger 1.8s infinite;
+}
+
+@keyframes pulse-danger {
+  0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.5); }
+  70% { box-shadow: 0 0 0 12px rgba(220, 38, 38, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+}
+
+.emergency-banner-text h3 {
+  color: var(--danger-dark);
+  font-size: 1.08rem;
+  margin-bottom: 0.2rem;
+  font-weight: 700;
+}
+
+.emergency-banner-text p {
+  font-size: 0.88rem;
+  color: #7F1D1D;
+  margin: 0;
+}
+
+/* Map Picker Container */
+.map-picker-wrapper {
+  margin-top: 0.6rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.map-toolbar {
+  padding: 0.65rem 0.95rem;
+  background: #0A192F;
+  color: #fff;
+  border-bottom: 1px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.map-coords-badge {
+  font-family: monospace;
+  background: #fff;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gold);
+  color: var(--primary-dark);
+  font-weight: 700;
+}
+
+.map-canvas {
+  height: 260px;
+  width: 100%;
+  z-index: 1;
+}
+
+/* Dropzone & Photo Upload */
+.dropzone-area {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.6rem 1rem;
+  text-align: center;
+  background: #fafafa;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.dropzone-area:hover,
+.dropzone-area.dragover {
+  border-color: var(--gold);
+  background: var(--gold-subtle);
+}
+
+.dropzone-icon {
+  font-size: 2.2rem;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.dropzone-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.dropzone-preview-item {
+  position: relative;
+  width: 100%;
+  height: 85px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.dropzone-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dropzone-remove-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+}
+
+/* Hotline Quick Call List */
+.hotline-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.hotline-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.35rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+.hotline-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(10, 25, 47, 0.12);
+}
+
+.hotline-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--danger-light);
+  color: var(--danger);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.hotline-card-info h4 {
+  font-size: 0.96rem;
+  color: var(--primary-dark);
+  margin-bottom: 0.2rem;
+  font-weight: 700;
+}
+
+.hotline-card-info .hotline-number {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--danger);
+}
+
+/* Tracking Status Timeline */
+.tracking-timeline {
+  position: relative;
+  padding-left: 2rem;
+  margin: 1.5rem 0;
+}
+
+.tracking-timeline::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 9px;
+  width: 2px;
+  background: var(--border-color);
+}
+
+.timeline-step {
+  position: relative;
+  margin-bottom: 1.85rem;
+}
+
+.timeline-step:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -2rem;
+  top: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeline-step.completed .timeline-dot {
+  border-color: var(--success);
+  background: var(--success);
+  color: #fff;
+}
+
+.timeline-step.current .timeline-dot {
+  border-color: var(--gold);
+  background: #fff;
+}
+
+.timeline-step.current .timeline-dot::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: var(--gold-dark);
+  border-radius: 50%;
+}
+
+.timeline-content h4 {
+  font-size: 0.98rem;
+  color: var(--primary-dark);
+  margin-bottom: 0.2rem;
+  font-weight: 700;
+}
+
+.timeline-content p {
+  font-size: 0.86rem;
+  color: var(--text-muted);
+}
+
+.timeline-time {
+  font-size: 0.78rem;
+  color: var(--text-light);
+}

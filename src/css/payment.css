@@ -1,0 +1,236 @@
+/* Payment Section Specific Styles */
+.payment-search-card {
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+  border: 1.5px solid #93C5FD;
+  border-radius: var(--radius-xl);
+  padding: 1.85rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(15, 52, 96, 0.06);
+}
+
+.payment-type-selector {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.payment-type-btn {
+  padding: 1.15rem 1rem;
+  background: #fff;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+.payment-type-btn:hover {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.payment-type-btn.active {
+  border-color: var(--gold-dark);
+  background: var(--gold-subtle);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.25);
+}
+
+.payment-type-icon {
+  font-size: 1.85rem;
+  color: var(--primary);
+}
+
+.payment-type-btn.active .payment-type-icon {
+  color: var(--gold-dark);
+}
+
+.payment-type-title {
+  font-family: var(--font-heading);
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.payment-type-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Bill Invoice Card */
+.bill-card {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: 1.85rem;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-normal);
+}
+
+.bill-card:hover {
+  box-shadow: var(--shadow-xl);
+  border-color: rgba(212, 175, 55, 0.5);
+}
+
+.bill-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--primary-dark), var(--gold));
+}
+
+.bill-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px dashed var(--border-color);
+  font-size: 0.95rem;
+}
+
+.bill-row:last-of-type {
+  border-bottom: none;
+}
+
+.bill-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  margin-top: 0.5rem;
+  border-top: 2px solid var(--border-color);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.bill-total-amount {
+  font-family: var(--font-heading);
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+}
+
+/* PromptPay QR Code Box */
+.promptpay-modal-content {
+  text-align: center;
+}
+
+.promptpay-card {
+  background: linear-gradient(135deg, #07152B 0%, #0F3460 100%);
+  color: #fff;
+  border-radius: var(--radius-xl);
+  padding: 1.65rem;
+  display: inline-block;
+  margin: 1rem auto;
+  box-shadow: 0 12px 30px rgba(10, 25, 47, 0.4);
+  border: 2px solid var(--gold);
+  max-width: 330px;
+  width: 100%;
+}
+
+.promptpay-logo {
+  height: 38px;
+  margin-bottom: 0.75rem;
+}
+
+.promptpay-qr-wrapper {
+  background: #fff;
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  display: inline-block;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.promptpay-qr-wrapper svg,
+.promptpay-qr-wrapper canvas {
+  display: block;
+  margin: 0 auto;
+}
+
+.promptpay-amount {
+  font-family: var(--font-heading);
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--gold-light);
+  margin-top: 0.85rem;
+}
+
+.promptpay-ref {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: monospace;
+}
+
+/* Official E-Receipt (Printable) */
+.receipt-paper {
+  background: #fff;
+  border: 2px solid var(--gold);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  max-width: 620px;
+  margin: 0 auto;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  position: relative;
+  color: #1e293b;
+}
+
+.receipt-header {
+  text-align: center;
+  border-bottom: 2px solid var(--primary-dark);
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.receipt-title {
+  font-family: var(--font-heading);
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+}
+
+.receipt-stamp {
+  position: absolute;
+  right: 2rem;
+  top: 6rem;
+  border: 3px double var(--gold-dark);
+  color: var(--gold-dark);
+  background: rgba(254, 249, 195, 0.7);
+  padding: 0.4rem 0.95rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.15rem;
+  transform: rotate(-12deg);
+  opacity: 0.9;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .receipt-paper, .receipt-paper * {
+    visibility: visible;
+  }
+  .receipt-paper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: 100%;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

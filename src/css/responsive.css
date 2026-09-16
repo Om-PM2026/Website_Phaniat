@@ -1,0 +1,309 @@
+/* ==========================================================================
+   Advanced Responsive Design System (Mobile, Tablet, Desktop)
+   Theme: Royal Navy Blue & Gold (สีน้ำเงินตัดทอง)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Large Desktop & Ultra-Wide Screens (min-width: 1440px)
+   -------------------------------------------------------------------------- */
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1320px;
+  }
+  .hero-title {
+    font-size: 3.25rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. Laptops & Large Tablets in Landscape (max-width: 1024px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .hero-text {
+    text-align: center;
+  }
+
+  .hero-badge {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-buttons {
+    justify-content: center;
+  }
+
+  .hero-card-banner {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .quick-services-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .emergency-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .payment-type-selector {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. Tablets in Portrait & Medium Screens (max-width: 768px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 72px;
+  }
+
+  body {
+    padding-bottom: 70px; /* Space for mobile sticky bottom navigation */
+  }
+
+  .hotline-bar {
+    font-size: 0.8rem;
+  }
+
+  .hotline-content {
+    justify-content: center;
+  }
+
+  .hotline-left {
+    justify-content: center;
+    gap: 0.85rem;
+    font-size: 0.78rem;
+  }
+
+  .hotline-right {
+    display: none; /* Hide admin demo toggle on small topbar; accessible via settings/mobile */
+  }
+
+  /* Mobile Slide-out Drawer Navigation */
+  .nav-menu {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 82%;
+    max-width: 320px;
+    height: 100vh;
+    background: #0A192F;
+    color: #fff;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 5rem 1.25rem 2rem;
+    box-shadow: 10px 0 35px rgba(0, 0, 0, 0.4);
+    border-right: 2px solid var(--gold);
+    transition: left var(--transition-normal);
+    z-index: 998;
+    overflow-y: auto;
+  }
+
+  .nav-menu.open {
+    left: 0;
+  }
+
+  .nav-link {
+    padding: 0.9rem 1.1rem;
+    font-size: 1.05rem;
+    color: #E2E8F0;
+    border-radius: var(--radius-lg);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    background: rgba(212, 175, 55, 0.15);
+    color: var(--gold-light);
+  }
+
+  .nav-link.active::after {
+    display: none;
+  }
+
+  .mobile-toggle-btn {
+    display: flex;
+  }
+
+  .brand-text h1 {
+    font-size: 1rem;
+  }
+
+  .brand-text p {
+    font-size: 0.7rem;
+  }
+
+  .hero-section {
+    padding: 3rem 0 4.5rem;
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .quick-services-section {
+    margin-top: -2.5rem;
+  }
+
+  .news-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .news-search-box {
+    width: 100%;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  /* Show Mobile Bottom Navigation */
+  .mobile-bottom-bar {
+    display: block;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. Mobile Phones (max-width: 576px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 576px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .brand-logo-wrap {
+    width: 44px;
+    height: 44px;
+  }
+
+  .brand-logo-wrap svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .user-badge-btn span:last-child {
+    display: none; /* Icon only on extra small screens */
+  }
+
+  .user-badge-btn {
+    padding: 0.4rem;
+    border-radius: 50%;
+  }
+
+  .hero-section {
+    padding: 2.5rem 0 3.5rem;
+  }
+
+  .hero-title {
+    font-size: 1.8rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+  }
+
+  .hero-buttons .btn {
+    width: 100%;
+  }
+
+  .hero-stat-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+  }
+
+  .hero-stat-card {
+    padding: 0.75rem;
+  }
+
+  .hero-stat-number {
+    font-size: 1.45rem;
+  }
+
+  .quick-services-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .service-card {
+    padding: 1.35rem 1.15rem;
+  }
+
+  .payment-type-selector {
+    grid-template-columns: 1fr;
+  }
+
+  .payment-search-card {
+    padding: 1.25rem 1rem;
+  }
+
+  .card {
+    padding: 1.25rem 1rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .modal-dialog {
+    max-height: 94vh;
+    border-radius: var(--radius-lg);
+  }
+
+  .modal-header {
+    padding: 1rem 1.25rem;
+  }
+
+  .modal-body {
+    padding: 1.15rem 1rem;
+  }
+
+  .modal-footer {
+    padding: 0.85rem 1rem;
+  }
+
+  .receipt-paper {
+    padding: 1.35rem 1rem;
+  }
+
+  .receipt-stamp {
+    position: static;
+    display: inline-block;
+    margin-bottom: 1rem;
+    transform: none;
+    font-size: 0.95rem;
+  }
+
+  .article-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .toast {
+    min-width: calc(100vw - 2rem);
+    margin: 0 1rem;
+    font-size: 0.88rem;
+  }
+
+  .map-canvas {
+    height: 220px;
+  }
+}

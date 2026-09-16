@@ -1,0 +1,73 @@
+:root {
+  /* Color System - Royal Navy Blue & Gold Theme (สีน้ำเงินตัดทอง) */
+  --primary: #0F3460;
+  --primary-dark: #0A192F;
+  --primary-light: #1E3A8A;
+  --primary-subtle: #EFF6FF;
+  --primary-gradient: linear-gradient(135deg, #0A192F 0%, #0F3460 55%, #1E3A8A 100%);
+  
+  --gold: #D4AF37;
+  --gold-dark: #A67C1E;
+  --gold-light: #FDE047;
+  --gold-subtle: #FEF9C3;
+  --gold-gradient: linear-gradient(135deg, #FDE047 0%, #D4AF37 60%, #B48C1C 100%);
+
+  --accent: #2563EB;
+  --accent-light: #DBEAFE;
+
+  --danger: #DC2626;
+  --danger-dark: #991B1B;
+  --danger-light: #FEE2E2;
+
+  --warning: #F59E0B;
+  --warning-light: #FEF3C7;
+
+  --success: #10B981;
+  --success-light: #D1FAE5;
+
+  --dark: #0A192F;
+  --dark-light: #1E293B;
+  --text-main: #1E293B;
+  --text-muted: #64748B;
+  --text-light: #94A3B8;
+  --bg-page: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --bg-surface: #F1F5F9;
+  --border-color: #E2E8F0;
+  --border-hover: #CBD5E1;
+  --border-gold: #D4AF37;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.88);
+  --glass-navy-bg: rgba(10, 25, 47, 0.85);
+  --glass-border: rgba(212, 175, 55, 0.3);
+  --glass-shadow: 0 8px 32px 0 rgba(10, 25, 47, 0.12);
+
+  /* Typography */
+  --font-heading: 'Prompt', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body: 'Sarabun', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(10, 25, 47, 0.08), 0 2px 4px -1px rgba(10, 25, 47, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(10, 25, 47, 0.1), 0 4px 6px -2px rgba(10, 25, 47, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(10, 25, 47, 0.15), 0 10px 10px -5px rgba(10, 25, 47, 0.06);
+  --shadow-navy: 0 10px 25px -5px rgba(15, 52, 96, 0.35);
+  --shadow-gold: 0 10px 25px -5px rgba(212, 175, 55, 0.35);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-slow: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Spacing */
+  --header-height: 80px;
+  --hotline-height: 38px;
+}

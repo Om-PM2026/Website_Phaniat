@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>องค์การบริหารส่วนตำบลเพนียด (อบต.เพนียด) | Smart Citizen Portal</title>
+  <meta name="description" content="ระบบบริการประชาชนอัจฉริยะ องค์การบริหารส่วนตำบลเพนียด แจ้งเหตุฉุกเฉิน 24 ชม. ชำระภาษีและค่าน้ำประปาออนไลน์ ร้องเรียนร้องทุกข์ และข่าวสารกิจกรรม" />
+
+  <!-- Google Fonts: Prompt & Sarabun -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="./src/css/variables.css" />
+  <link rel="stylesheet" href="./src/css/base.css" />
+  <link rel="stylesheet" href="./src/css/layout.css" />
+  <link rel="stylesheet" href="./src/css/components.css" />
+  <link rel="stylesheet" href="./src/css/emergency.css" />
+  <link rel="stylesheet" href="./src/css/payment.css" />
+  <link rel="stylesheet" href="./src/css/news.css" />
+  <link rel="stylesheet" href="./src/css/responsive.css" />
+</head>
+<body>
+
+  <!-- 1. Top Hotline Bar -->
+  <div class="hotline-bar">
+    <div class="container hotline-content">
+      <div class="hotline-left">
+        <span class="hotline-badge">
+          <span class="pulse-dot"></span> สายด่วนฉุกเฉิน 24 ชม.
+        </span>
+        <a href="tel:1669" class="hotline-item">
+          <i class="fas fa-ambulance"></i> กู้ชีพ-การแพทย์: <strong>1669</strong>
+        </a>
+        <a href="tel:191" class="hotline-item">
+          <i class="fas fa-shield-alt"></i> เหตุด่วนเหตุร้าย: <strong>191</strong>
+        </a>
+        <a href="tel:036499111" class="hotline-item">
+          <i class="fas fa-phone-volume"></i> สนง.อบต.เพนียด: <strong>036-499-111</strong>
+        </a>
+      </div>
+      <div class="hotline-right d-flex align-center gap-1">
+        <button id="admin-demo-toggle-btn" class="badge badge-warning" style="cursor: pointer; border: none;">
+          <i class="fas fa-user-shield"></i> สลับมุมมองเจ้าหน้าที่ อบต.
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Main Navigation Header -->
+  <header class="main-header">
+    <div class="container header-inner">
+      <a href="#" class="brand" onclick="window.navigateToSection('section-home'); return false;">
+        <div class="brand-logo-wrap">
+          <!-- Custom Official Emblem SVG in Royal Navy & Gold -->
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="46" fill="none" stroke="#D4AF37" stroke-width="4"/>
+            <polygon points="50,15 62,38 88,38 67,54 75,78 50,63 25,78 33,54 12,38 38,38" fill="#FDE047"/>
+            <circle cx="50" cy="50" r="16" fill="#0A192F" stroke="#D4AF37" stroke-width="1.5"/>
+            <path d="M50 38 L54 48 L46 48 Z" fill="#D4AF37"/>
+            <circle cx="50" cy="53" r="3" fill="#FFF"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>องค์การบริหารส่วนตำบลเพนียด</h1>
+          <p>Phaniat Subdistrict Administrative Organization</p>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Menu / Mobile Drawer -->
+      <nav id="nav-menu" class="nav-menu">
+        <a href="#home" class="nav-link active" data-target="section-home">
+          <i class="fas fa-home"></i> หน้าแรก
+        </a>
+        <a href="#emergency" class="nav-link highlight-btn" data-target="section-emergency">
+          <i class="fas fa-bullhorn"></i> แจ้งเหตุฉุกเฉิน 24 ชม.
+        </a>
+        <a href="#payment" class="nav-link" data-target="section-payment">
+          <i class="fas fa-file-invoice-dollar"></i> ชำระค่าบริการ
+        </a>
+        <a href="#complaint" class="nav-link" data-target="section-complaint">
+          <i class="fas fa-comments"></i> ร้องทุกข์-ร้องเรียน
+        </a>
+        <a href="#news" class="nav-link" data-target="section-news">
+          <i class="fas fa-newspaper"></i> ข่าวสาร/กิจกรรม
+        </a>
+        <a href="#contact" class="nav-link" data-target="section-contact">
+          <i class="fas fa-map-marked-alt"></i> ติดต่อเรา
+        </a>
+      </nav>
+
+      <!-- Auth Actions & Mobile Toggle -->
+      <div class="header-actions">
+        <button id="auth-header-btn" class="user-badge-btn" aria-label="เข้าสู่ระบบหรือสมัครสมาชิก">
+          <span id="user-avatar-icon" class="user-avatar">
+            <i class="fas fa-user"></i>
+          </span>
+          <span id="user-badge-text">เข้าสู่ระบบ / สมัคร</span>
+        </button>
+
+        <button id="mobile-toggle-btn" class="mobile-toggle-btn" aria-label="เปิดเมนูมือถือ">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3. Hero Banner Section -->
+  <section class="hero-section">
+    <div class="hero-pattern"></div>
+    <div class="container hero-content">
+      <div class="hero-text">
+        <div class="hero-badge">
+          <i class="fas fa-award"></i> เมืองน่าอยู่ สังคมอบอุ่น ชุมชนเข้มแข็ง ก้าวทันเทคโนโลยี
+        </div>
+        <h2 class="hero-title">
+          ศูนย์บริการประชาชนอัจฉริยะ<br />
+          <span>อบต.เพนียด</span> สู่ยุคดิจิทัล
+        </h2>
+        <p class="hero-subtitle">
+          ยกระดับการให้บริการประชาชนตำบลเพนียด ครบจบในที่เดียว แจ้งเหตุด่วนฉุกเฉิน 24 ชม. พร้อมพิกัด GPS ชำระภาษีและค่าน้ำประปาออนไลน์ และติดตามเรื่องร้องเรียนได้ตลอด 24 ชั่วโมง
+        </p>
+        <div class="hero-buttons">
+          <button class="btn btn-danger btn-lg" onclick="window.navigateToSection('section-emergency');">
+            <i class="fas fa-exclamation-triangle"></i> แจ้งเหตุด่วนฉุกเฉิน
+          </button>
+          <button class="btn btn-gold btn-lg" onclick="window.navigateToSection('section-payment');">
+            <i class="fas fa-qrcode"></i> ชำระภาษี / ค่าน้ำ
+          </button>
+          <button class="btn btn-outline-white btn-lg" onclick="window.navigateToSection('section-complaint');">
+            <i class="fas fa-hand-holding-heart"></i> ศูนย์เรื่องราวร้องทุกข์
+          </button>
+        </div>
+      </div>
+
+      <div class="hero-card-banner">
+        <div class="d-flex align-center gap-2" style="margin-bottom: 1rem;">
+          <div style="width: 44px; height: 44px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div>
+            <h3 style="color: #fff; font-size: 1.15rem; margin: 0;">ภาพรวมการบริการดิจิทัล</h3>
+            <p style="font-size: 0.8rem; color: rgba(255,255,255,0.8); margin: 0;">ข้อมูลแบบเรียลไทม์ ประจำปี 2569</p>
+          </div>
+        </div>
+        <div class="hero-stat-grid">
+          <div class="hero-stat-card">
+            <div class="hero-stat-number">100%</div>
+            <div class="hero-stat-label">รับแจ้งเหตุฉุกเฉิน 24 ชม.</div>
+          </div>
+          <div class="hero-stat-card">
+            <div class="hero-stat-number">1,420+</div>
+            <div class="hero-stat-label">รายการชำระออนไลน์</div>
+          </div>
+          <div class="hero-stat-card">
+            <div class="hero-stat-number">&lt; 15 นาที</div>
+            <div class="hero-stat-label">ระยะเวลาตอบสนองเหตุ</div>
+          </div>
+          <div class="hero-stat-card">
+            <div class="hero-stat-number">98.5%</div>
+            <div class="hero-stat-label">ความพึงพอใจของประชาชน</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Quick Services 4-Card Bar -->
+  <section class="container quick-services-section">
+    <div class="quick-services-grid">
+      <div class="service-card service-card-emergency" data-target="section-emergency">
+        <div class="service-icon-box">
+          <i class="fas fa-ambulance"></i>
+        </div>
+        <h3 class="service-card-title">1. แจ้งเหตุฉุกเฉิน 24 ชม.</h3>
+        <p class="service-card-desc">อุบัติเหตุ, เพลิงไหม้, เจ็บป่วยฉุกเฉิน, สัตว์ร้ายเข้าบ้าน พร้อมแชร์พิกัด GPS ทันที</p>
+        <span class="service-card-action">แจ้งเหตุด่วน <i class="fas fa-arrow-right"></i></span>
+      </div>
+
+      <div class="service-card service-card-payment" data-target="section-payment">
+        <div class="service-icon-box">
+          <i class="fas fa-money-check-alt"></i>
+        </div>
+        <h3 class="service-card-title">2. ชำระค่าบริการออนไลน์</h3>
+        <p class="service-card-desc">ภาษีที่ดิน/สิ่งปลูกสร้าง, ภาษีป้าย, ค่าน้ำประปา, และค่าขยะมูลฝอย ผ่าน QR PromptPay</p>
+        <span class="service-card-action">ชำระเงิน <i class="fas fa-arrow-right"></i></span>
+      </div>
+
+      <div class="service-card service-card-complaint" data-target="section-complaint">
+        <div class="service-icon-box">
+          <i class="fas fa-bullhorn"></i>
+        </div>
+        <h3 class="service-card-title">3. ศูนย์เรื่องราวร้องทุกข์</h3>
+        <p class="service-card-desc">แจ้งปัญหาถนนชำรุด, ไฟทางดับ, ขยะตกค้าง พร้อมติดตามขั้นตอนการทำงานของเจ้าหน้าที่</p>
+        <span class="service-card-action">แจ้งร้องทุกข์ <i class="fas fa-arrow-right"></i></span>
+      </div>
+
+      <div class="service-card service-card-news" data-target="section-news">
+        <div class="service-icon-box">
+          <i class="fas fa-newspaper"></i>
+        </div>
+        <h3 class="service-card-title">4. ข่าวสารและกิจกรรม</h3>
+        <p class="service-card-desc">ประกาศจัดซื้อจัดจ้าง, ข่าวประชาสัมพันธ์โครงการ, และกิจกรรมส่งเสริมชุมชนตำบลเพนียด</p>
+        <span class="service-card-action">ดูข่าวทั้งหมด <i class="fas fa-arrow-right"></i></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN PORTAL CONTAINER WITH ROUTED SECTIONS -->
+  <main class="container">
+
+    <!-- ==================== SECTION 1: HOME & NEWS ==================== -->
+    <section id="section-home" class="portal-section active">
+      <div class="section-header">
+        <span class="section-tag">ศูนย์รวมข้อมูลข่าวสาร</span>
+        <h2 class="section-title">ข่าวสาร ประชาสัมพันธ์ และกิจกรรม อบต.เพนียด</h2>
+        <p class="section-subtitle">ติดตามความเคลื่อนไหว ประกาศราชการ กิจกรรมพัฒนาคุณภาพชีวิต และสาระน่ารู้สำหรับประชาชน</p>
+      </div>
+
+      <!-- News Filter Toolbar -->
+      <div class="news-toolbar">
+        <div class="news-filter-chips">
+          <button class="filter-chip active" data-category="all">ทั้งหมด</button>
+          <button class="filter-chip" data-category="activity">กิจกรรม อบต.</button>
+          <button class="filter-chip" data-category="announcement">ข่าวประชาสัมพันธ์</button>
+          <button class="filter-chip" data-category="procurement">จัดซื้อจัดจ้าง</button>
+          <button class="filter-chip" data-category="knowledge">สาระน่ารู้ท้องถิ่น</button>
+        </div>
+        <div class="news-search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="news-search-input" class="form-control" placeholder="ค้นหาข่าวสาร / กิจกรรม..." />
+        </div>
+      </div>
+
+      <!-- News Cards Grid -->
+      <div id="news-grid-container" class="news-grid">
+        <!-- Injected via news.js -->
+      </div>
+    </section>
+
+    <!-- ==================== SECTION 2: EMERGENCY REPORTING ==================== -->
+    <section id="section-emergency" class="portal-section">
+      <div class="section-header">
+        <span class="section-tag" style="background: var(--danger-light); color: var(--danger-dark);">สายด่วนกู้ชีพ 24 ชั่วโมง</span>
+        <h2 class="section-title">ศูนย์รับแจ้งเหตุฉุกเฉินและสาธารณภัย อบต.เพนียด</h2>
+        <p class="section-subtitle">แจ้งอุบัติเหตุ เพลิงไหม้ ภัยธรรมชาติ หรือเหตุฉุกเฉินได้ทันที พร้อมระบบดึงพิกัด GPS แม่นยำ</p>
+      </div>
+
+      <div class="emergency-banner-alert">
+        <div class="emergency-banner-icon">
+          <i class="fas fa-phone-alt"></i>
+        </div>
+        <div class="emergency-banner-text">
+          <h3>กรณีเหตุวิกฤตอันตรายถึงแก่ชีวิต โปรดโทรตรงทันที!</h3>
+          <p>หน่วยกู้ชีพ อบต.เพนียด <strong>036-499-111</strong> หรือ กู้ชีพฉุกเฉิน <strong>1669</strong> และ เหตุด่วนเหตุร้าย <strong>191</strong> ตลอด 24 ชม.</p>
+        </div>
+      </div>
+
+      <div class="emergency-grid">
+        <!-- Emergency Form -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-edit" style="color: var(--danger);"></i> แบบฟอร์มแจ้งเหตุด่วนฉุกเฉิน</h3>
+            <span class="badge badge-danger">ออนไลน์ 24 ชม.</span>
+          </div>
+
+          <form id="emergency-form">
+            <div class="form-group">
+              <label class="form-label">ประเภทเหตุฉุกเฉิน <span class="required">*</span></label>
+              <select id="emergency-type-select" class="form-control" required>
+                <option value="">-- กรุณาเลือกประเภทเหตุ --</option>
+                <option value="อุบัติเหตุทางถนน">🚗 อุบัติเหตุทางถนน / รถเฉี่ยวชน</option>
+                <option value="เพลิงไหม้ / ไฟป่า / ไฟไหม้หญ้า">🔥 เพลิงไหม้ / ไฟป่า / ไฟไหม้หญ้า</option>
+                <option value="ผู้ป่วยฉุกเฉิน / หมดสติ / เรียกรถกู้ชีพ">🚑 เจ็บป่วยฉุกเฉิน / เรียกรถพยาบาลกู้ชีพ</option>
+                <option value="สัตว์มีพิษ / งู / ตัวเงินตัวทองเข้าบ้าน">🐍 สัตว์เลื้อยคลาน / งู / สัตว์มีพิษเข้าบ้าน</option>
+                <option value="น้ำท่วม / วาตภัย / ดินสไลด์ / ต้นไม้ล้ม">⛈️ น้ำท่วม / วาตภัย / ภัยธรรมชาติ</option>
+                <option value="เหตุฉุกเฉินอื่นๆ">⚠️ เหตุฉุกเฉินอื่นๆ</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">เบอร์โทรศัพท์ติดต่อกลับของผู้แจ้ง <span class="required">*</span></label>
+              <div class="input-with-icon">
+                <i class="fas fa-phone input-icon"></i>
+                <input type="tel" id="emergency-phone-input" class="form-control" placeholder="08xxxxxxxx (เพื่อให้เจ้าหน้าที่ติดต่อกลับ)" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">ชื่อผู้แจ้งเหตุ (ไม่ระบุก็ได้)</label>
+              <div class="input-with-icon">
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" id="emergency-name-input" class="form-control" placeholder="ชื่อ-นามสกุลของคุณ" />
+              </div>
+            </div>
+
+            <!-- Location Section -->
+            <div class="form-group">
+              <label class="form-label">
+                พิกัดและตำแหน่งสถานที่เกิดเหตุ <span class="required">*</span>
+              </label>
+              <div class="d-flex justify-between align-center" style="margin-bottom: 0.5rem;">
+                <button type="button" id="emergency-get-location-btn" class="btn btn-outline-primary btn-sm">
+                  <i class="fas fa-crosshairs"></i> ดึงพิกัด GPS ปัจจุบันของฉัน
+                </button>
+                <span class="map-coords-badge" id="emergency-coords-display">14.85500, 100.61500</span>
+              </div>
+
+              <!-- Map Container -->
+              <div class="map-picker-wrapper">
+                <div class="map-toolbar">
+                  <span><i class="fas fa-info-circle"></i> สามารถคลิกหรือลากหมุดบนแผนที่เพื่อระบุจุดเกิดเหตุที่แน่นอน</span>
+                </div>
+                <div id="emergency-map" class="map-canvas"></div>
+              </div>
+
+              <input type="hidden" id="emergency-lat-input" value="14.8550" />
+              <input type="hidden" id="emergency-lng-input" value="100.6150" />
+
+              <div style="margin-top: 0.5rem;">
+                <input type="text" id="emergency-address-input" class="form-control" placeholder="ระบุจุดสังเกตเพิ่มเติม (เช่น หน้าโรงเรียนวัดเพนียด, ปากซอย 3)" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">รายละเอียดเหตุการณ์และสภาพผู้บาดเจ็บ <span class="required">*</span></label>
+              <textarea id="emergency-details-input" class="form-control" rows="3" placeholder="ระบุอาการ, จำนวนผู้บาดเจ็บ, สภาพความเสียหาย หรือข้อมูลสำคัญ..." required></textarea>
+            </div>
+
+            <!-- Photo Upload Dropzone -->
+            <div class="form-group">
+              <label class="form-label">แนบรูปภาพสถานที่เกิดเหตุ / รูปผู้บาดเจ็บ (ถ้ามี)</label>
+              <div id="emergency-dropzone" class="dropzone-area">
+                <div class="dropzone-icon"><i class="fas fa-camera"></i></div>
+                <p style="font-weight: 600; margin-bottom: 0.2rem;">คลิกเพื่อถ่ายภาพ หรือลากไฟล์ภาพมาวางที่นี่</p>
+                <p class="form-help">รองรับไฟล์ JPG, PNG (สูงสุด 4 รูป)</p>
+                <input type="file" id="emergency-file-input" accept="image/*" multiple class="visually-hidden" />
+              </div>
+              <div id="emergency-photo-previews" class="dropzone-preview-grid"></div>
+            </div>
+
+            <button type="submit" class="btn btn-danger btn-lg btn-block" style="margin-top: 1.5rem;">
+              <i class="fas fa-paper-plane"></i> ส่งข้อมูลแจ้งเหตุด่วนทันที
+            </button>
+          </form>
+        </div>
+
+        <!-- Sidebar: Hotline Directory & Tracking -->
+        <div>
+          <!-- Search Emergency Code -->
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <div class="card-header">
+              <h3 class="card-title" style="font-size: 1.05rem;">
+                <i class="fas fa-search" style="color: var(--primary);"></i> ตรวจสอบสถานะการเข้าช่วยเหลือ
+              </h3>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+              กรอกรหัสแจ้งเหตุฉุกเฉิน (เช่น EMG-2026-0012) เพื่อดูพิกัดและการเดินทางของทีมกู้ชีพ
+            </p>
+            <div class="d-flex gap-1">
+              <input type="text" id="emergency-search-code-input" class="form-control" placeholder="เช่น EMG-2026-0012" />
+              <button type="button" id="emergency-track-btn" class="btn btn-primary">
+                ตรวจสอบ
+              </button>
+            </div>
+          </div>
+
+          <!-- Hotlines Card -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title" style="font-size: 1.05rem;">
+                <i class="fas fa-phone-square-alt" style="color: var(--danger);"></i> หมายเลขโทรศัพท์ฉุกเฉินสำคัญ
+              </h3>
+            </div>
+            <div class="hotline-grid" style="grid-template-columns: 1fr;">
+              <a href="tel:1669" class="hotline-card">
+                <div class="hotline-card-icon"><i class="fas fa-ambulance"></i></div>
+                <div class="hotline-card-info">
+                  <h4>ศูนย์กู้ชีพการแพทย์ฉุกเฉิน</h4>
+                  <div class="hotline-number">1669</div>
+                </div>
+              </a>
+              <a href="tel:191" class="hotline-card">
+                <div class="hotline-card-icon"><i class="fas fa-shield-alt"></i></div>
+                <div class="hotline-card-info">
+                  <h4>ศูนย์รับแจ้งเหตุด่วน 191</h4>
+                  <div class="hotline-number">191</div>
+                </div>
+              </a>
+              <a href="tel:199" class="hotline-card">
+                <div class="hotline-card-icon"><i class="fas fa-fire-extinguisher"></i></div>
+                <div class="hotline-card-info">
+                  <h4>ศูนย์ดับเพลิงและกู้ภัย</h4>
+                  <div class="hotline-number">199</div>
+                </div>
+              </a>
+              <a href="tel:036499111" class="hotline-card">
+                <div class="hotline-card-icon"><i class="fas fa-landmark"></i></div>
+                <div class="hotline-card-info">
+                  <h4>งานป้องกันฯ อบต.เพนียด</h4>
+                  <div class="hotline-number">036-499-111</div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SECTION 3: E-PAYMENT SERVICES ==================== -->
+    <section id="section-payment" class="portal-section">
+      <div class="section-header">
+        <span class="section-tag">Smart E-Payment</span>
+        <h2 class="section-title">ระบบชำระค่าบริการและภาษีออนไลน์ อบต.เพนียด</h2>
+        <p class="section-subtitle">
+          ตรวจสอบยอดค้างชำระภาษีที่ดิน สิ่งปลูกสร้าง ภาษีป้าย ค่าน้ำประปา และค่าขยะมูลฝอย สแกนจ่ายผ่าน QR Code พร้อมเพย์ได้ทันที พร้อมรับใบเสร็จรับเงินอิเล็กทรอนิกส์
+        </p>
+      </div>
+
+      <!-- Payment Service Tabs / Type Filter -->
+      <div class="payment-type-selector">
+        <div class="payment-type-btn active" data-type="all">
+          <i class="fas fa-layer-group payment-type-icon"></i>
+          <span class="payment-type-title">รายการทั้งหมด</span>
+          <span class="payment-type-desc">ดูยอดชำระภาษี ค่าน้ำ และค่าขยะ</span>
+        </div>
+        <div class="payment-type-btn" data-type="water">
+          <i class="fas fa-faucet payment-type-icon" style="color: #0284C7;"></i>
+          <span class="payment-type-title">ค่าน้ำประปา อบต.</span>
+          <span class="payment-type-desc">ค้นหาตามรหัสมิเตอร์ หรือชื่อผู้ใช้น้ำ</span>
+        </div>
+        <div class="payment-type-btn" data-type="tax">
+          <i class="fas fa-landmark payment-type-icon" style="color: #0D7C66;"></i>
+          <span class="payment-type-title">ภาษีที่ดิน / ภาษีป้าย</span>
+          <span class="payment-type-desc">ค้นหาด้วยเลขบัตร ปชช. หรือรหัสแปลง</span>
+        </div>
+        <div class="payment-type-btn" data-type="waste">
+          <i class="fas fa-trash-alt payment-type-icon" style="color: #F59E0B;"></i>
+          <span class="payment-type-title">ค่าธรรมเนียมเก็บขยะ</span>
+          <span class="payment-type-desc">ค่าเก็บขยะรายเดือน / รายปี</span>
+        </div>
+      </div>
+
+      <!-- Search Invoice Card -->
+      <div class="payment-search-card">
+        <div class="d-flex justify-between align-center" style="margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+          <h3 style="font-size: 1.15rem; color: var(--primary-dark); margin: 0;">
+            <i class="fas fa-search"></i> ค้นหารายการชำระเงินของท่าน
+          </h3>
+          <span style="font-size: 0.85rem; color: var(--text-muted);">
+            ลองพิมพ์ตัวอย่าง: <code>0812345678</code> หรือ <code>1100200345678</code> หรือ <code>MTR-8842</code>
+          </span>
+        </div>
+        <div class="d-flex gap-1" style="flex-wrap: wrap;">
+          <input type="text" id="payment-search-input" class="form-control" style="flex: 1; min-width: 260px;" placeholder="กรอกเลขประจำตัวประชาชน 13 หลัก, เบอร์โทรศัพท์, หรือเลขที่บิล..." />
+          <button id="payment-search-btn" class="btn btn-primary">
+            <i class="fas fa-search"></i> ค้นหายอดชำระ
+          </button>
+        </div>
+      </div>
+
+      <!-- Invoices Display Container -->
+      <div id="payment-invoices-container">
+        <!-- Injected dynamically via payment.js -->
+      </div>
+    </section>
+
+    <!-- ==================== SECTION 4: COMPLAINTS & GRIEVANCES ==================== -->
+    <section id="section-complaint" class="portal-section">
+      <div class="section-header">
+        <span class="section-tag" style="background: var(--warning-light); color: #92400E;">รับฟังเสียงประชาชน</span>
+        <h2 class="section-title">ศูนย์รับเรื่องราวร้องทุกข์ / ร้องเรียน อบต.เพนียด</h2>
+        <p class="section-subtitle">
+          แจ้งปัญหาความเดือดร้อน ถนนชำรุด ไฟฟ้าสาธารณะดับ ขยะตกค้าง มลพิษ หรือข้อเสนอแนะพัฒนาตำบล ติดตามผลได้แบบเรียลไทม์
+        </p>
+      </div>
+
+      <div class="emergency-grid">
+        <!-- Complaint Form -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-edit" style="color: var(--warning);"></i> แบบฟอร์มยื่นเรื่องร้องเรียน-ร้องทุกข์</h3>
+            <span class="badge badge-warning">ระบบออนไลน์</span>
+          </div>
+
+          <form id="complaint-form">
+            <div class="form-group">
+              <label class="form-label">หมวดหมู่เรื่องร้องเรียน <span class="required">*</span></label>
+              <select id="complaint-category-select" class="form-control" required>
+                <option value="">-- เลือกหมวดหมู่ปัญหา --</option>
+                <option value="ถนนชำรุด / หลุมบ่อ">🚧 ถนนชำรุด / ทางสัญจรเป็นหลุมบ่อ</option>
+                <option value="ไฟฟ้าส่องสว่างดับ">💡 ไฟฟ้าสาธารณะดับ / เสียหาย</option>
+                <option value="ขยะมูลฝอยตกค้าง">🗑️ ขยะมูลฝอยตกค้าง / จุดทิ้งขยะสกปรก</option>
+                <option value="ท่อระบายน้ำอุดตัน / น้ำท่วมขัง">🌊 ท่อระบายน้ำอุดตัน / ปัญหาน้ำท่วมขัง</option>
+                <option value="กลิ่น / เสียง / มลพิษสิ่งแวดล้อม">🏭 กลิ่นรบกวน / เสียงดัง / มลพิษ</option>
+                <option value="การให้บริการของเจ้าหน้าที่">👤 การให้บริการของเจ้าหน้าที่ อบต.</option>
+                <option value="ข้อเสนอแนะพัฒนาตำบล / เรื่องอื่นๆ">💬 ข้อเสนอแนะพัฒนาตำบล / เรื่องอื่นๆ</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">หัวข้อเรื่องร้องเรียน <span class="required">*</span></label>
+              <input type="text" id="complaint-title-input" class="form-control" placeholder="เช่น ขอให้ซ่อมแซมไฟทางดับปากซอย 2 หมู่ 4" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">รายละเอียดความเดือดร้อน <span class="required">*</span></label>
+              <textarea id="complaint-details-input" class="form-control" rows="3" placeholder="อธิบายรายละเอียดปัญหา ระยะเวลาที่เกิดปัญหา และความเดือดร้อน..." required></textarea>
+            </div>
+
+            <!-- Anonymous Option -->
+            <div class="form-group" style="background: var(--bg-surface); padding: 0.85rem 1rem; border-radius: var(--radius-md);">
+              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-weight: 600;">
+                <input type="checkbox" id="complaint-anon-checkbox" />
+                <span>ร้องเรียนแบบไม่เปิดเผยตัวตน (Anonymous)</span>
+              </label>
+              <p class="form-help" style="margin-left: 1.5rem;">หากเลือกตัวเลือกนี้ ข้อมูลส่วนตัวของท่านจะไม่ถูกเปิดเผยต่อสาธารณะ</p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">เบอร์โทรศัพท์ติดต่อ (เพื่อแจ้งผลความคืบหน้า)</label>
+              <div class="input-with-icon">
+                <i class="fas fa-phone input-icon"></i>
+                <input type="tel" id="complaint-phone-input" class="form-control" placeholder="08xxxxxxxx" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">ชื่อผู้ร้องเรียน</label>
+              <input type="text" id="complaint-name-input" class="form-control" placeholder="ชื่อ-นามสกุล (เว้นว่างได้หากไม่ประสงค์ออกนาม)" />
+            </div>
+
+            <!-- Location Section -->
+            <div class="form-group">
+              <label class="form-label">พิกัดและสถานที่เกิดเหตุ <span class="required">*</span></label>
+              <div class="d-flex justify-between align-center" style="margin-bottom: 0.5rem;">
+                <button type="button" id="complaint-get-location-btn" class="btn btn-outline-primary btn-sm">
+                  <i class="fas fa-crosshairs"></i> ระบุพิกัดสถานที่ปัจจุบัน
+                </button>
+                <span class="map-coords-badge" id="complaint-coords-display">14.85500, 100.61500</span>
+              </div>
+
+              <div class="map-picker-wrapper">
+                <div class="map-toolbar">
+                  <span><i class="fas fa-map-pin"></i> ปักหมุดตำแหน่งที่พบปัญหาบนแผนที่</span>
+                </div>
+                <div id="complaint-map" class="map-canvas"></div>
+              </div>
+
+              <input type="hidden" id="complaint-lat-input" value="14.8550" />
+              <input type="hidden" id="complaint-lng-input" value="100.6150" />
+
+              <div style="margin-top: 0.5rem;">
+                <input type="text" id="complaint-address-input" class="form-control" placeholder="ระบุชื่อซอย หมู่บ้าน หรือจุดสังเกตสำคัญใน ต.เพนียด" />
+              </div>
+            </div>
+
+            <!-- Photo Upload Dropzone -->
+            <div class="form-group">
+              <label class="form-label">แนบภาพถ่ายสภาพปัญหา (ถ้ามี)</label>
+              <div id="complaint-dropzone" class="dropzone-area">
+                <div class="dropzone-icon"><i class="fas fa-images"></i></div>
+                <p style="font-weight: 600; margin-bottom: 0.2rem;">คลิกเพื่ออัปโหลด หรือลากไฟล์ภาพมาวาง</p>
+                <p class="form-help">รองรับไฟล์ JPG, PNG</p>
+                <input type="file" id="complaint-file-input" accept="image/*" multiple class="visually-hidden" />
+              </div>
+              <div id="complaint-photo-previews" class="dropzone-preview-grid"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top: 1.5rem;">
+              <i class="fas fa-paper-plane"></i> ส่งเรื่องร้องเรียนสู่ อบต.เพนียด
+            </button>
+          </form>
+        </div>
+
+        <!-- Sidebar: Tracking & Recent Issues -->
+        <div>
+          <!-- Search Complaint Tracking Code -->
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <div class="card-header">
+              <h3 class="card-title" style="font-size: 1.05rem;">
+                <i class="fas fa-search" style="color: var(--primary);"></i> ติดตามผลเรื่องร้องทุกข์
+              </h3>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+              กรอกรหัสเรื่องร้องทุกข์ (เช่น CMP-2026-0034) เพื่อดูไทม์ไลน์การเข้าแก้ไขของกองช่าง
+            </p>
+            <div class="d-flex gap-1">
+              <input type="text" id="complaint-search-input" class="form-control" placeholder="เช่น CMP-2026-0034" />
+              <button type="button" id="complaint-track-search-btn" class="btn btn-primary">
+                ค้นหา
+              </button>
+            </div>
+          </div>
+
+          <!-- Recent Complaints List -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title" style="font-size: 1.05rem;">
+                <i class="fas fa-clipboard-list" style="color: var(--primary);"></i> เรื่องร้องเรียนล่าสุดในพื้นที่
+              </h3>
+            </div>
+            <div id="recent-complaints-list">
+              <!-- Injected dynamically via complaints.js -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SECTION 5: CONTACT & ABOUT ==================== -->
+    <section id="section-contact" class="portal-section">
+      <div class="section-header">
+        <span class="section-tag">ข้อมูลหน่วยงาน</span>
+        <h2 class="section-title">ติดต่อองค์การบริหารส่วนตำบลเพนียด</h2>
+        <p class="section-subtitle">พร้อมให้บริการและรับฟังข้อเสนอแนะจากพี่น้องประชาชนทุกวันในวันและเวลาราชการ</p>
+      </div>
+
+      <div class="emergency-grid">
+        <div class="card">
+          <h3 style="font-size: 1.25rem; color: var(--primary-dark); margin-bottom: 1.25rem;">
+            <i class="fas fa-building"></i> ข้อมูลที่ทำการ อบต.เพนียด
+          </h3>
+          <p style="line-height: 1.8; margin-bottom: 1.5rem;">
+            <strong>ที่อยู่:</strong> องค์การบริหารส่วนตำบลเพนียด อำเภอโคกสำโรง จังหวัดลพบุรี 15120<br />
+            <strong>โทรศัพท์สำนักงาน:</strong> 036-499-111, 036-499-112<br />
+            <strong>โทรสาร (Fax):</strong> 036-499-113<br />
+            <strong>อีเมลราชการ:</strong> contact@phaniat.go.th, saraban_phaniat@dla.go.th<br />
+            <strong>วันและเวลาทำการ:</strong> วันจันทร์ - วันศุกร์ เวลา 08.30 น. - 16.30 น. (เว้นวันหยุดราชการ)
+          </p>
+
+          <h4 style="font-size: 1.05rem; margin-bottom: 0.75rem; color: var(--dark);">
+            <i class="fas fa-users-cog"></i> เบอร์โทรศัพท์ภายในหน่วยงาน
+          </h4>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.95rem;">
+            <li><i class="fas fa-angle-right" style="color: var(--primary);"></i> <strong>สำนักปลัด:</strong> ต่อ 101 - 103</li>
+            <li><i class="fas fa-angle-right" style="color: var(--primary);"></i> <strong>กองคลัง (งานจัดเก็บภาษี/ค่าน้ำ):</strong> ต่อ 104 - 106</li>
+            <li><i class="fas fa-angle-right" style="color: var(--primary);"></i> <strong>กองช่าง (งานซ่อมบำรุง/ถนน/ไฟฟ้า):</strong> ต่อ 107 - 108</li>
+            <li><i class="fas fa-angle-right" style="color: var(--primary);"></i> <strong>กองสาธารณสุขและสิ่งแวดล้อม (งานขยะ/สุขภาพ):</strong> ต่อ 109 - 110</li>
+            <li><i class="fas fa-angle-right" style="color: var(--danger);"></i> <strong>งานป้องกันและบรรเทาสาธารณภัย (24 ชม.):</strong> ต่อ 199 หรือ 036-499-111</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 1.25rem; color: var(--primary-dark); margin-bottom: 1.25rem;">
+            <i class="fas fa-envelope-open-text"></i> ส่งข้อความถึงนายก อบต.เพนียด
+          </h3>
+          <form onsubmit="event.preventDefault(); window.showToast('ส่งข้อความถึงผู้บริหารเรียบร้อยแล้ว เจ้าหน้าที่จะติดต่อกลับโดยเร็ว', 'success'); this.reset();">
+            <div class="form-group">
+              <label class="form-label">ชื่อ-นามสกุล</label>
+              <input type="text" class="form-control" placeholder="ชื่อของคุณ" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">เบอร์โทรศัพท์</label>
+              <input type="tel" class="form-control" placeholder="08xxxxxxxx" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">ข้อความ / คำถาม / ข้อเสนอแนะ</label>
+              <textarea class="form-control" rows="4" placeholder="พิมพ์ข้อความของคุณที่นี่..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              <i class="fas fa-paper-plane"></i> ส่งข้อความ
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 5. Main Footer -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h2>องค์การบริหารส่วนตำบลเพนียด</h2>
+          <p>
+            มุ่งมั่นพัฒนาคุณภาพชีวิตของประชาชนตำบลเพนียด ด้วยระบบบริการภาครัฐดิจิทัลที่โปร่งใส รวดเร็ว เข้าถึงง่าย และทันสมัย
+          </p>
+          <div class="d-flex gap-1">
+            <a href="#" class="btn btn-outline-white btn-sm"><i class="fab fa-facebook-f"></i> Facebook</a>
+            <a href="#" class="btn btn-outline-white btn-sm"><i class="fab fa-line"></i> Line Official</a>
+            <a href="#" class="btn btn-outline-white btn-sm"><i class="fab fa-youtube"></i> YouTube</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h3>บริการประชาชน</h3>
+          <ul class="footer-links">
+            <li><a href="#" onclick="window.navigateToSection('section-emergency'); return false;"><i class="fas fa-angle-right"></i> แจ้งเหตุด่วนฉุกเฉิน 24 ชม.</a></li>
+            <li><a href="#" onclick="window.navigateToSection('section-payment'); return false;"><i class="fas fa-angle-right"></i> ชำระภาษีที่ดินและป้าย</a></li>
+            <li><a href="#" onclick="window.navigateToSection('section-payment'); return false;"><i class="fas fa-angle-right"></i> ชำระค่าน้ำประปา อบต.</a></li>
+            <li><a href="#" onclick="window.navigateToSection('section-complaint'); return false;"><i class="fas fa-angle-right"></i> ศูนย์เรื่องราวร้องทุกข์</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h3>ลิงก์หน่วยงานที่เกี่ยวข้อง</h3>
+          <ul class="footer-links">
+            <li><a href="https://www.dla.go.th" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> กรมส่งเสริมการปกครองท้องถิ่น</a></li>
+            <li><a href="https://www.lopburi.go.th" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> จังหวัดลพบุรี</a></li>
+            <li><a href="https://www.gprocurement.go.th" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> ระบบจัดซื้อจัดจ้างภาครัฐ (e-GP)</a></li>
+            <li><a href="https://www.egov.go.th" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> ศูนย์กลางบริการภาครัฐ (e-Gov)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h3>ติดต่อฉุกเฉิน</h3>
+          <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><i class="fas fa-phone-alt" style="color: var(--danger);"></i> <strong>สายด่วนฉุกเฉิน:</strong> 036-499-111</p>
+          <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><i class="fas fa-ambulance" style="color: var(--danger);"></i> <strong>กู้ชีพ 1669</strong> | <strong>ตำรวจ 191</strong></p>
+          <p style="font-size: 0.85rem; color: #94A3B8; margin-top: 1rem;">
+            ที่ทำการ อบต.เพนียด อ.โคกสำโรง จ.ลพบุรี 15120
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          &copy; 2026 องค์การบริหารส่วนตำบลเพนียด. สงวนลิขสิทธิ์ตามกฎหมาย.
+        </div>
+        <div>
+          พัฒนาระบบด้วย Vite + Vanilla HTML/CSS/JS เพื่อประสิทธิภาพสูงสุด
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 6. Mobile Sticky Bottom Navigation Bar -->
+  <div class="mobile-bottom-bar">
+    <div class="mobile-bottom-nav">
+      <a href="#home" class="mobile-nav-item active" data-target="section-home">
+        <i class="fas fa-home"></i>
+        <span>หน้าแรก</span>
+      </a>
+      <a href="#payment" class="mobile-nav-item" data-target="section-payment">
+        <i class="fas fa-receipt"></i>
+        <span>ชำระเงิน</span>
+      </a>
+      <a href="#emergency" class="mobile-nav-item emergency-fab" data-target="section-emergency">
+        <i class="fas fa-ambulance"></i>
+      </a>
+      <a href="#complaint" class="mobile-nav-item" data-target="section-complaint">
+        <i class="fas fa-comments"></i>
+        <span>ร้องเรียน</span>
+      </a>
+      <a href="#contact" class="mobile-nav-item" data-target="section-contact">
+        <i class="fas fa-phone"></i>
+        <span>ติดต่อ</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- 1. Phone Authentication & OTP Modal -->
+  <div id="auth-modal" class="modal-backdrop">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-mobile-alt" style="color: var(--primary);"></i> เข้าสู่ระบบ / สมัครสมาชิก</h3>
+        <button id="auth-modal-close" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Step 1: Input Phone Number -->
+        <div id="auth-step-phone">
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+            กรุณากรอกเบอร์โทรศัพท์มือถือ 10 หลัก เพื่อรับรหัสยืนยัน OTP สำหรับเข้าใช้งานระบบ
+          </p>
+          <div class="form-group">
+            <label class="form-label">เบอร์โทรศัพท์มือถือ <span class="required">*</span></label>
+            <div class="input-with-icon">
+              <i class="fas fa-phone input-icon"></i>
+              <input type="tel" id="auth-phone-input" class="form-control" placeholder="0812345678" maxlength="10" />
+            </div>
+            <p class="form-help">ตัวอย่าง: 0812345678</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label">ชื่อ-นามสกุล (สำหรับผู้สมัครใหม่)</label>
+            <div class="input-with-icon">
+              <i class="fas fa-user input-icon"></i>
+              <input type="text" id="auth-name-input" class="form-control" placeholder="นายสมชาย เพนียดดี" />
+            </div>
+          </div>
+          <button type="button" id="send-otp-btn" class="btn btn-primary btn-block">
+            <i class="fas fa-sms"></i> รับรหัส OTP ทาง SMS
+          </button>
+        </div>
+
+        <!-- Step 2: Verify OTP -->
+        <div id="auth-step-otp" style="display: none;">
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+            ระบบได้ส่งรหัส OTP 6 หลัก ไปที่เบอร์ <strong id="auth-target-phone"></strong>
+          </p>
+          <div style="background: var(--primary-subtle); border-radius: var(--radius-md); padding: 0.75rem; margin-bottom: 1.25rem; font-size: 0.85rem;">
+            💡 <strong>รหัสทดสอบ OTP:</strong> <span id="demo-otp-code" style="font-family: monospace; font-size: 1.1rem; font-weight: bold; color: var(--primary-dark);">123456</span>
+            <button type="button" id="quick-otp-fill" class="btn btn-outline-primary btn-sm" style="margin-left: 0.5rem; padding: 0.2rem 0.5rem; font-size: 0.75rem;">
+              กรอกอัตโนมัติ
+            </button>
+          </div>
+          <div class="form-group">
+            <label class="form-label">กรอกรหัสยืนยัน OTP <span class="required">*</span></label>
+            <input type="text" id="auth-otp-input" class="form-control" placeholder="xxxxxx" maxlength="6" style="letter-spacing: 0.5em; text-align: center; font-size: 1.25rem; font-weight: bold;" />
+            <p class="form-help text-center" style="margin-top: 0.5rem;">
+              รหัสหมดอายุใน: <span id="otp-countdown" style="color: var(--danger); font-weight: 600;">60 วินาที</span>
+            </p>
+          </div>
+          <button type="button" id="verify-otp-btn" class="btn btn-primary btn-block">
+            <i class="fas fa-check-circle"></i> ยืนยันรหัส OTP
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. User Profile Modal -->
+  <div id="profile-modal" class="modal-backdrop">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-id-card" style="color: var(--primary);"></i> ข้อมูลโปรไฟล์ประชาชน</h3>
+        <button id="profile-modal-close" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center" style="margin-bottom: 1.5rem;">
+          <div style="width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--gold)); color: white; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 0.75rem; font-weight: bold;">
+            <i class="fas fa-user-check"></i>
+          </div>
+          <h3 id="profile-display-name" style="margin-bottom: 0.25rem;">ประชาชนตำบลเพนียด</h3>
+          <span class="badge badge-success">ยืนยันตัวตนด้วยเบอร์โทรศัพท์แล้ว</span>
+        </div>
+
+        <div style="background: var(--bg-surface); border-radius: var(--radius-lg); padding: 1rem; margin-bottom: 1.5rem;">
+          <div class="bill-row">
+            <span style="color: var(--text-muted);">เบอร์โทรศัพท์:</span>
+            <strong id="profile-display-phone">-</strong>
+          </div>
+          <div class="bill-row">
+            <span style="color: var(--text-muted);">เลขประจำตัวประชาชน:</span>
+            <span id="profile-display-id">-</span>
+          </div>
+          <div class="bill-row">
+            <span style="color: var(--text-muted);">ที่อยู่ตามทะเบียน:</span>
+            <span id="profile-display-address">ตำบลเพนียด</span>
+          </div>
+        </div>
+
+        <button type="button" id="profile-logout-btn" class="btn btn-outline btn-block" style="color: var(--danger); border-color: var(--danger-light);">
+          <i class="fas fa-sign-out-alt"></i> ออกจากระบบ
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. PromptPay QR Code Modal -->
+  <div id="promptpay-modal" class="modal-backdrop">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-qrcode" style="color: #003764;"></i> สแกนจ่ายด้วย Thai QR Payment</h3>
+        <button id="promptpay-modal-close" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body promptpay-modal-content">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+          เปิดแอปธนาคารของท่าน (โมบายแบงก์กิ้ง) และสแกน QR Code เพื่อชำระเงิน
+        </p>
+
+        <div class="promptpay-card">
+          <div style="font-size: 0.9rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: 0.05em;">
+            THAI QR PAYMENT (PROMPTPAY)
+          </div>
+          <div id="promptpay-qr-box" class="promptpay-qr-wrapper">
+            <!-- QR Injected via JS -->
+          </div>
+          <div id="pp-modal-amount" class="promptpay-amount">฿0.00</div>
+          <div id="pp-modal-customer" style="font-size: 0.85rem; margin-top: 0.35rem; font-weight: 500;">-</div>
+          <div id="pp-modal-type" style="font-size: 0.75rem; color: rgba(255,255,255,0.7);">-</div>
+          <div id="pp-modal-ref" class="promptpay-ref" style="margin-top: 0.5rem;">REF: -</div>
+        </div>
+
+        <div style="margin-top: 1rem;">
+          <button type="button" id="confirm-pay-btn" class="btn btn-primary btn-block">
+            <i class="fas fa-check-circle"></i> ยืนยันการชำระเงินจำลอง (รับใบเสร็จ)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Official Printable E-Receipt Modal -->
+  <div id="receipt-modal" class="modal-backdrop">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-header no-print">
+        <h3 class="modal-title"><i class="fas fa-receipt" style="color: var(--primary);"></i> ใบเสร็จรับเงินอิเล็กทรอนิกส์ (E-Receipt)</h3>
+        <button id="receipt-modal-close" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="receipt-paper">
+          <div class="receipt-stamp">ชำระเงินแล้ว / PAID</div>
+          <div class="receipt-header">
+            <div style="font-size: 1.1rem; font-weight: bold; color: var(--primary-dark);">องค์การบริหารส่วนตำบลเพนียด</div>
+            <div style="font-size: 0.85rem; color: #475569;">อำเภอโคกสำโรง จังหวัดลพบุรี 15120 | โทร. 036-499-111</div>
+            <div class="receipt-title" style="margin-top: 0.5rem;">ใบเสร็จรับเงิน (Electronic Receipt)</div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; font-size: 0.9rem;">
+            <div>
+              <strong>เลขที่ใบเสร็จ:</strong> <span id="receipt-no" style="font-family: monospace; font-weight: bold;">-</span><br />
+              <strong>วันที่ชำระ:</strong> <span id="receipt-date">-</span>
+            </div>
+            <div class="text-right">
+              <strong>ชื่อผู้ชำระ:</strong> <span id="receipt-customer">-</span><br />
+              <strong>ที่อยู่/สถานที่:</strong> <span id="receipt-address">-</span>
+            </div>
+          </div>
+
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.9rem;">
+            <thead>
+              <tr style="background: #F1F5F9; border-top: 1px solid #CBD5E1; border-bottom: 1px solid #CBD5E1;">
+                <th style="padding: 0.6rem 0.5rem; text-align: left;">ลำดับ</th>
+                <th style="padding: 0.6rem 0.5rem; text-align: left;">รายการชำระ</th>
+                <th style="padding: 0.6rem 0.5rem; text-align: left;">รหัสอ้างอิง</th>
+                <th style="padding: 0.6rem 0.5rem; text-align: right;">จำนวนเงิน (บาท)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid #E2E8F0;">
+                <td style="padding: 0.75rem 0.5rem;">1</td>
+                <td style="padding: 0.75rem 0.5rem;" id="receipt-item-title">-</td>
+                <td style="padding: 0.75rem 0.5rem;" id="receipt-item-ref">-</td>
+                <td style="padding: 0.75rem 0.5rem; text-align: right; font-weight: bold;" id="receipt-item-amount">-</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr style="border-top: 2px solid #000; border-bottom: 2px solid #000; font-weight: bold;">
+                <td colspan="3" style="padding: 0.75rem 0.5rem; text-align: right;">รวมยอดเงินทั้งสิ้น:</td>
+                <td style="padding: 0.75rem 0.5rem; text-align: right; font-size: 1.1rem; color: var(--primary-dark);" id="receipt-total-amount">-</td>
+              </tr>
+            </tfoot>
+          </table>
+
+          <div style="display: flex; justify-content: space-between; margin-top: 2.5rem; font-size: 0.85rem; color: #475569;">
+            <div>
+              <p>เอกสารฉบับนี้ออกโดยระบบอิเล็กทรอนิกส์ของ อบต.เพนียด<br />สามารถใช้เป็นหลักฐานทางราชการได้</p>
+            </div>
+            <div class="text-center" style="min-width: 180px;">
+              <div style="border-bottom: 1px dotted #94A3B8; height: 35px; margin-bottom: 0.25rem;"></div>
+              <div>(นายทะเบียน / พนักงานการเงิน)</div>
+              <div style="font-size: 0.75rem;">กองคลัง อบต.เพนียด</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer no-print">
+        <button type="button" id="receipt-print-btn" class="btn btn-primary">
+          <i class="fas fa-print"></i> พิมพ์ใบเสร็จรับเงิน (Print)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Emergency Tracking Timeline Modal -->
+  <div id="emergency-track-modal" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-ambulance" style="color: var(--danger);"></i> ติดตามการช่วยเหลือเหตุฉุกเฉิน</h3>
+        <button id="track-modal-close" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="background: var(--bg-surface); padding: 1rem; border-radius: var(--radius-lg); margin-bottom: 1.25rem;">
+          <div class="d-flex justify-between align-center" style="margin-bottom: 0.4rem;">
+            <strong id="track-modal-code" style="font-size: 1.1rem; color: var(--danger); font-family: monospace;">EMG-2026-0012</strong>
+            <span id="track-modal-status-badge" class="badge badge-danger">กำลังปฏิบัติการ</span>
+          </div>
+          <div style="font-size: 0.9rem; color: var(--text-main); margin-bottom: 0.25rem;">
+            <strong>ประเภท:</strong> <span id="track-modal-type">-</span> | <strong>เวลาแจ้ง:</strong> <span id="track-modal-time">-</span>
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">
+            <i class="fas fa-map-marker-alt"></i> <span id="track-modal-location">-</span>
+          </div>
+        </div>
+
+        <h4 style="font-size: 1rem; margin-bottom: 0.75rem;"><i class="fas fa-route"></i> ไทม์ไลน์การเข้าช่วยเหลือ</h4>
+        <div id="track-modal-timeline" class="tracking-timeline">
+          <!-- Injected via emergency.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Complaint Tracking Timeline Modal -->
+  <div id="complaint-track-modal" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-clipboard-check" style="color: var(--primary);"></i> ติดตามเรื่องราวร้องทุกข์</h3>
+        <button id="complaint-track-modal-close" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="background: var(--bg-surface); padding: 1rem; border-radius: var(--radius-lg); margin-bottom: 1.25rem;">
+          <div class="d-flex justify-between align-center" style="margin-bottom: 0.4rem;">
+            <strong id="cmp-modal-code" style="font-size: 1.1rem; color: var(--primary-dark); font-family: monospace;">CMP-2026-0034</strong>
+            <span id="cmp-modal-status-badge" class="badge badge-warning">กำลังตรวจสอบ</span>
+          </div>
+          <h4 id="cmp-modal-title" style="font-size: 1.05rem; margin-bottom: 0.25rem;">-</h4>
+          <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.25rem;">
+            <strong>หมวดหมู่:</strong> <span id="cmp-modal-category">-</span> | <strong>เวลา:</strong> <span id="cmp-modal-time">-</span>
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">
+            <i class="fas fa-map-marker-alt"></i> <span id="cmp-modal-location">-</span>
+          </div>
+        </div>
+
+        <h4 style="font-size: 1rem; margin-bottom: 0.75rem;"><i class="fas fa-tasks"></i> ไทม์ไลน์การดำเนินงานของ อบต.</h4>
+        <div id="cmp-modal-timeline" class="tracking-timeline">
+          <!-- Injected via complaints.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. News Article Full Modal -->
+  <div id="article-modal" class="modal-backdrop">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-header">
+        <span id="article-modal-category" class="badge badge-primary">ข่าวประชาสัมพันธ์</span>
+        <button id="article-modal-close" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <img id="article-modal-cover" src="" alt="Article Cover" class="article-modal-cover" />
+        <h2 id="article-modal-title" style="font-size: 1.45rem; margin-bottom: 0.5rem; color: var(--dark);"></h2>
+        <div class="news-meta" style="margin-bottom: 1.25rem; font-size: 0.85rem;">
+          <span><i class="far fa-calendar-alt"></i> <span id="article-modal-date"></span></span>
+          <span><i class="fas fa-user-circle"></i> <span id="article-modal-author"></span></span>
+        </div>
+        <div id="article-modal-content" class="article-content"></div>
+
+        <h4 style="margin-top: 1.5rem; font-size: 1rem;"><i class="fas fa-images"></i> ภาพบรรยากาศกิจกรรม</h4>
+        <div id="article-modal-gallery" class="article-gallery-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. Officer / Admin Demo Simulation Modal -->
+  <div id="admin-modal" class="modal-backdrop">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-header" style="background: #0F172A; color: white;">
+        <h3 class="modal-title" style="color: var(--gold-light);">
+          <i class="fas fa-user-shield"></i> แผงควบคุมเจ้าหน้าที่ อบต.เพนียด (Officer Simulator)
+        </h3>
+        <button id="admin-modal-close" class="modal-close-btn" style="color: white;">&times;</button>
+      </div>
+      <div class="modal-body" style="background: #F8FAFC;">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+          ส่วนนี้จำลองการทำงานหลังบ้านของเจ้าหน้าที่ อบต.เพนียด เพื่อกดรับเรื่องฉุกเฉิน, อัปเดตสถานะการส่งทีมกู้ชีพ/กองช่าง, และตรวจยอดชำระเงิน
+        </p>
+
+        <div class="tabs-nav">
+          <button class="tab-btn admin-tab-btn active" data-target="admin-tab-emergency">
+            <i class="fas fa-ambulance"></i> รับแจ้งเหตุฉุกเฉิน
+          </button>
+          <button class="tab-btn admin-tab-btn" data-target="admin-tab-complaints">
+            <i class="fas fa-comments"></i> เรื่องร้องทุกข์
+          </button>
+          <button class="tab-btn admin-tab-btn" data-target="admin-tab-payments">
+            <i class="fas fa-money-check"></i> ตรวจสอบยอดชำระ
+          </button>
+        </div>
+
+        <div id="admin-tab-emergency" class="admin-tab-pane active">
+          <div id="admin-emergency-list"></div>
+        </div>
+
+        <div id="admin-tab-complaints" class="admin-tab-pane" style="display: none;">
+          <div id="admin-complaints-list"></div>
+        </div>
+
+        <div id="admin-tab-payments" class="admin-tab-pane" style="display: none;">
+          <div id="admin-invoices-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Root Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Leaflet JS Library -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Modular App Script -->
+  <script type="module" src="./src/js/main.js"></script>
+</body>
+</html>
